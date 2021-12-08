@@ -342,6 +342,70 @@ const YFI_PRICES = []
 const ZEC_PRICES = []
 const ZRX_PRICES = []
 
+var priceChanges = {}
+
+ONEINCH_PRICE_CHANGE = 0
+AAVE_PRICE_CHANGE = 0
+ADA_PRICE_CHANGE = 0
+AED_PRICE_CHANGE = 0
+ALGO_PRICE_CHANGE = 0
+AUD_PRICE_CHANGE = 0
+BAT_PRICE_CHANGE = 0
+BCH_PRICE_CHANGE = 0
+BHD_PRICE_CHANGE = 0
+BNB_PRICE_CHANGE = 0
+BNT_PRICE_CHANGE = 0
+BSV_PRICE_CHANGE = 0
+BTC_PRICE_CHANGE = 0
+CAD_PRICE_CHANGE = 0
+CEL_PRICE_CHANGE = 0
+CHZ_PRICE_CHANGE = 0
+COMP_PRICE_CHANGE = 0
+DASH_PRICE_CHANGE = 0
+DOGE_PRICE_CHANGE = 0
+DOT_PRICE_CHANGE = 0
+ENJ_PRICE_CHANGE = 0
+EOS_PRICE_CHANGE = 0
+ETC_PRICE_CHANGE = 0
+ETH_PRICE_CHANGE = 0
+GBP_PRICE_CHANGE = 0
+GRT_PRICE_CHANGE = 0
+HT_PRICE_CHANGE = 0
+ICP_PRICE_CHANGE = 0
+KNC_PRICE_CHANGE = 0
+LINK_PRICE_CHANGE = 0
+LPT_PRICE_CHANGE = 0
+LUNA_PRICE_CHANGE = 0
+MANA_PRICE_CHANGE = 0
+MATIC_PRICE_CHANGE = 0
+MIOTA_PRICE_CHANGE = 0
+MKR_PRICE_CHANGE = 0
+NEO_PRICE_CHANGE = 0
+NEXO_PRICE_CHANGE = 0
+OMG_PRICE_CHANGE = 0
+OMR_PRICE_CHANGE = 0
+PAXG_PRICE_CHANGE = 0
+REP_PRICE_CHANGE = 0
+SAR_PRICE_CHANGE = 0
+SNX_PRICE_CHANGE = 0
+SOL_PRICE_CHANGE = 0
+SUSHI_PRICE_CHANGE = 0
+THETA_PRICE_CHANGE = 0
+TRX_PRICE_CHANGE = 0
+UMA_PRICE_CHANGE = 0
+UNI_PRICE_CHANGE = 0
+USDC_PRICE_CHANGE = 0
+USDT_PRICE_CHANGE = 0
+VET_PRICE_CHANGE = 0
+XAU_PRICE_CHANGE = 0
+XLM_PRICE_CHANGE = 0
+XMR_PRICE_CHANGE = 0
+XRP_PRICE_CHANGE = 0
+XTZ_PRICE_CHANGE = 0
+YFI_PRICE_CHANGE = 0
+ZEC_PRICE_CHANGE = 0
+ZRX_PRICE_CHANGE = 0
+
 
 
 // Minimum eth to swap
@@ -399,29 +463,24 @@ async function monitorPrice() {
   try {
     const oneinchAmount = await oneinchPriceContract.methods.latestAnswer().call()
     const oneinchPrice = web3.utils.toWei(oneinchAmount.toString(), 'Ether')
-    console.log('1INCH Price:', oneinchPrice / 100000000000000000000000000, ' USD')
+    console.log('ONEINCH Price:', oneinchPrice / 100000000000000000000000000, ' USD')
     ONEINCH_PRICES.push(oneinchPrice)
-    if (ONEINCH_PRICES.length >= 10) {
-      if (ONEINCH_PRICES[0] < ONEINCH_PRICES[ONEINCH_PRICES.length-1]){
-        console.log("ONEINCH price went up %", ((ONEINCH_PRICES[ONEINCH_PRICES.length-1] - ONEINCH_PRICES[0])/ONEINCH_PRICES[0]) *100 );
+    if (ONEINCH_PRICES.length >= 6) {
+      if (ONEINCH_PRICES[0] < ONEINCH_PRICES[ONEINCH_PRICES.length - 1]) {
+        console.log("ONEINCH price went up %", ((ONEINCH_PRICES[ONEINCH_PRICES.length - 1] - ONEINCH_PRICES[0]) / ONEINCH_PRICES[0]) * 100);
+        ONEINCH_PRICE_CHANGE = ((ONEINCH_PRICES[ONEINCH_PRICES.length - 1] - ONEINCH_PRICES[0]) / ONEINCH_PRICES[0]) * 100;
       }
-      if (ONEINCH_PRICES[0] > ONEINCH_PRICES[ONEINCH_PRICES.length-1]){
-        console.log("ONEINCH price went down %", ((ONEINCH_PRICES[0] - ONEINCH_PRICES[ONEINCH_PRICES.length-1])) *100 );
+      if (ONEINCH_PRICES[0] > ONEINCH_PRICES[ONEINCH_PRICES.length - 1]) {
+        console.log("ONEINCH price went down %", ((ONEINCH_PRICES[0] - ONEINCH_PRICES[ONEINCH_PRICES.length - 1])) * 100);
+        ONEINCH_PRICE_CHANGE = ((ONEINCH_PRICES[0] - ONEINCH_PRICES[ONEINCH_PRICES.length - 1])) * -100;
       }
-      if (ONEINCH_PRICES[0] == ONEINCH_PRICES[ONEINCH_PRICES.length-1]){
+      if (ONEINCH_PRICES[0] == ONEINCH_PRICES[ONEINCH_PRICES.length - 1]) {
         console.log("ONEINCH price didn't change");
+        ONEINCH_PRICE_CHANGE = 0;
       }
-      ONEINCH_PRICES.length=0;   
+      ONEINCH_PRICES.pop[0];
+      priceChanges["ONEINCH"] = ONEINCH_PRICE_CHANGE;
     }
-    
-
-    // if (oneinchPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -434,28 +493,23 @@ async function monitorPrice() {
     const aaveAmount = await aavePriceContract.methods.latestAnswer().call()
     const aavePrice = web3.utils.toWei(aaveAmount.toString(), 'Ether')
     console.log('AAVE Price:', aavePrice / 100000000000000000000000000, ' USD')
-    AAVE_PRICES.push(aavePrice)    
-    if (AAVE_PRICES.length >= 10) {
-      if (AAVE_PRICES[0] < AAVE_PRICES[AAVE_PRICES.length-1]){
-        console.log("AAVE price went up %", ((AAVE_PRICES[AAVE_PRICES.length-1] - AAVE_PRICES[0])/AAVE_PRICES[0]) *100 );
+    AAVE_PRICES.push(aavePrice)
+    if (AAVE_PRICES.length >= 6) {
+      if (AAVE_PRICES[0] < AAVE_PRICES[AAVE_PRICES.length - 1]) {
+        console.log("AAVE price went up %", ((AAVE_PRICES[AAVE_PRICES.length - 1] - AAVE_PRICES[0]) / AAVE_PRICES[0]) * 100);
+        AAVE_PRICE_CHANGE = ((AAVE_PRICES[AAVE_PRICES.length - 1] - AAVE_PRICES[0]) / AAVE_PRICES[0]) * 100;
       }
-      if (AAVE_PRICES[0] > AAVE_PRICES[AAVE_PRICES.length-1]){
-        console.log("AAVE price went down %", ((AAVE_PRICES[0] - AAVE_PRICES[AAVE_PRICES.length-1])) *100 );
+      if (AAVE_PRICES[0] > AAVE_PRICES[AAVE_PRICES.length - 1]) {
+        console.log("AAVE price went down %", ((AAVE_PRICES[0] - AAVE_PRICES[AAVE_PRICES.length - 1])) * 100);
+        AAVE_PRICE_CHANGE = ((AAVE_PRICES[0] - AAVE_PRICES[AAVE_PRICES.length - 1])) * -100;
       }
-      if (AAVE_PRICES[0] == AAVE_PRICES[AAVE_PRICES.length-1]){
+      if (AAVE_PRICES[0] == AAVE_PRICES[AAVE_PRICES.length - 1]) {
         console.log("AAVE price didn't change");
+        AAVE_PRICE_CHANGE = 0;
       }
-      AAVE_PRICES.length=0;   
+      AAVE_PRICES.pop[0];
+      priceChanges["AAVE"] = AAVE_PRICE_CHANGE;
     }
-    
-
-    // if (aavePrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -469,27 +523,22 @@ async function monitorPrice() {
     const adaPrice = web3.utils.toWei(adaAmount.toString(), 'Ether')
     console.log('ADA Price:', adaPrice / 100000000000000000000000000, ' USD')
     ADA_PRICES.push(adaPrice)
-    if (ADA_PRICES.length >= 10) {
-      if (ADA_PRICES[0] < ADA_PRICES[ADA_PRICES.length-1]){
-        console.log("ADA price went up %", ((ADA_PRICES[ADA_PRICES.length-1] - ADA_PRICES[0])/ADA_PRICES[0]) *100 );
+    if (ADA_PRICES.length >= 6) {
+      if (ADA_PRICES[0] < ADA_PRICES[ADA_PRICES.length - 1]) {
+        console.log("ADA price went up %", ((ADA_PRICES[ADA_PRICES.length - 1] - ADA_PRICES[0]) / ADA_PRICES[0]) * 100);
+        ADA_PRICE_CHANGE = ((ADA_PRICES[ADA_PRICES.length - 1] - ADA_PRICES[0]) / ADA_PRICES[0]) * 100;
       }
-      if (ADA_PRICES[0] > ADA_PRICES[ADA_PRICES.length-1]){
-        console.log("ADA price went down %", ((ADA_PRICES[0] - ADA_PRICES[ADA_PRICES.length-1])) *100 );
+      if (ADA_PRICES[0] > ADA_PRICES[ADA_PRICES.length - 1]) {
+        console.log("ADA price went down %", ((ADA_PRICES[0] - ADA_PRICES[ADA_PRICES.length - 1])) * 100);
+        ADA_PRICE_CHANGE = ((ADA_PRICES[0] - ADA_PRICES[ADA_PRICES.length - 1])) * -100;
       }
-      if (ADA_PRICES[0] == ADA_PRICES[ADA_PRICES.length-1]){
+      if (ADA_PRICES[0] == ADA_PRICES[ADA_PRICES.length - 1]) {
         console.log("ADA price didn't change");
+        ADA_PRICE_CHANGE = 0;
       }
-      ADA_PRICES.length=0;   
+      ADA_PRICES.pop[0];
+      priceChanges["ADA"] = ADA_PRICE_CHANGE;
     }
-    
-
-    // if (adaPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -503,27 +552,22 @@ async function monitorPrice() {
     const aedPrice = web3.utils.toWei(aedAmount.toString(), 'Ether')
     console.log('AED Price:', aedPrice / 100000000000000000000000000, ' USD')
     AED_PRICES.push(aedPrice)
-    if (AED_PRICES.length >= 10) {
-      if (AED_PRICES[0] < AED_PRICES[AED_PRICES.length-1]){
-        console.log("AED price went up %", ((AED_PRICES[AED_PRICES.length-1] - AED_PRICES[0])/AED_PRICES[0]) *100 );
+    if (AED_PRICES.length >= 6) {
+      if (AED_PRICES[0] < AED_PRICES[AED_PRICES.length - 1]) {
+        console.log("AED price went up %", ((AED_PRICES[AED_PRICES.length - 1] - AED_PRICES[0]) / AED_PRICES[0]) * 100);
+        AED_PRICE_CHANGE = ((AED_PRICES[AED_PRICES.length - 1] - AED_PRICES[0]) / AED_PRICES[0]) * 100;
       }
-      if (AED_PRICES[0] > AED_PRICES[AED_PRICES.length-1]){
-        console.log("AED price went down %", ((AED_PRICES[0] - AED_PRICES[AED_PRICES.length-1])) *100 );
+      if (AED_PRICES[0] > AED_PRICES[AED_PRICES.length - 1]) {
+        console.log("AED price went down %", ((AED_PRICES[0] - AED_PRICES[AED_PRICES.length - 1])) * 100);
+        AED_PRICE_CHANGE = ((AED_PRICES[0] - AED_PRICES[AED_PRICES.length - 1])) * -100;
       }
-      if (AED_PRICES[0] == AED_PRICES[AED_PRICES.length-1]){
+      if (AED_PRICES[0] == AED_PRICES[AED_PRICES.length - 1]) {
         console.log("AED price didn't change");
+        AED_PRICE_CHANGE = 0;
       }
-      AED_PRICES.length=0;   
+      AED_PRICES.pop[0];
+      priceChanges["AED"] = AED_PRICE_CHANGE;
     }
-    
-
-    // if (aedPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -537,27 +581,22 @@ async function monitorPrice() {
     const algoPrice = web3.utils.toWei(algoAmount.toString(), 'Ether')
     console.log('ALGO Price:', algoPrice / 100000000000000000000000000, ' USD')
     ALGO_PRICES.push(algoPrice)
-    if (ALGO_PRICES.length >= 10) {
-      if (ALGO_PRICES[0] < ALGO_PRICES[ALGO_PRICES.length-1]){
-        console.log("ALGO price went up %", ((ALGO_PRICES[ALGO_PRICES.length-1] - ALGO_PRICES[0])/ALGO_PRICES[0]) *100 );
+    if (ALGO_PRICES.length >= 6) {
+      if (ALGO_PRICES[0] < ALGO_PRICES[ALGO_PRICES.length - 1]) {
+        console.log("ALGO price went up %", ((ALGO_PRICES[ALGO_PRICES.length - 1] - ALGO_PRICES[0]) / ALGO_PRICES[0]) * 100);
+        ALGO_PRICE_CHANGE = ((ALGO_PRICES[ALGO_PRICES.length - 1] - ALGO_PRICES[0]) / ALGO_PRICES[0]) * 100;
       }
-      if (ALGO_PRICES[0] > ALGO_PRICES[ALGO_PRICES.length-1]){
-        console.log("ALGO price went down %", ((ALGO_PRICES[0] - ALGO_PRICES[ALGO_PRICES.length-1])) *100 );
+      if (ALGO_PRICES[0] > ALGO_PRICES[ALGO_PRICES.length - 1]) {
+        console.log("ALGO price went down %", ((ALGO_PRICES[0] - ALGO_PRICES[ALGO_PRICES.length - 1])) * 100);
+        ALGO_PRICE_CHANGE = ((ALGO_PRICES[0] - ALGO_PRICES[ALGO_PRICES.length - 1])) * -100;
       }
-      if (ALGO_PRICES[0] == ALGO_PRICES[ALGO_PRICES.length-1]){
+      if (ALGO_PRICES[0] == ALGO_PRICES[ALGO_PRICES.length - 1]) {
         console.log("ALGO price didn't change");
+        ALGO_PRICE_CHANGE = 0;
       }
-      ALGO_PRICES.length=0;   
+      ALGO_PRICES.pop[0];
+      priceChanges["ALGO"] = ALGO_PRICE_CHANGE;
     }
-    
-
-    // if (algoPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -571,26 +610,22 @@ async function monitorPrice() {
     const audPrice = web3.utils.toWei(audAmount.toString(), 'Ether')
     console.log('AUD Price:', audPrice / 100000000000000000000000000, ' USD')
     AUD_PRICES.push(audPrice)
-    if (AUD_PRICES.length >= 10) {
-      if (AUD_PRICES[0] < AUD_PRICES[AUD_PRICES.length-1]){
-        console.log("AUD price went up %", ((AUD_PRICES[AUD_PRICES.length-1] - AUD_PRICES[0])/AUD_PRICES[0]) *100 );
+    if (AUD_PRICES.length >= 6) {
+      if (AUD_PRICES[0] < AUD_PRICES[AUD_PRICES.length - 1]) {
+        console.log("AUD price went up %", ((AUD_PRICES[AUD_PRICES.length - 1] - AUD_PRICES[0]) / AUD_PRICES[0]) * 100);
+        AUD_PRICE_CHANGE = ((AUD_PRICES[AUD_PRICES.length - 1] - AUD_PRICES[0]) / AUD_PRICES[0]) * 100;
       }
-      if (AUD_PRICES[0] > AUD_PRICES[AUD_PRICES.length-1]){
-        console.log("AUD price went down %", ((AUD_PRICES[0] - AUD_PRICES[AUD_PRICES.length-1])) *100 );
+      if (AUD_PRICES[0] > AUD_PRICES[AUD_PRICES.length - 1]) {
+        console.log("AUD price went down %", ((AUD_PRICES[0] - AUD_PRICES[AUD_PRICES.length - 1])) * 100);
+        AUD_PRICE_CHANGE = ((AUD_PRICES[0] - AUD_PRICES[AUD_PRICES.length - 1])) * -100;
       }
-      if (AUD_PRICES[0] == AUD_PRICES[AUD_PRICES.length-1]){
+      if (AUD_PRICES[0] == AUD_PRICES[AUD_PRICES.length - 1]) {
         console.log("AUD price didn't change");
+        AUD_PRICE_CHANGE = 0;
       }
-      AUD_PRICES.length=0;   
+      AUD_PRICES.pop[0];
+      priceChanges["AUD"] = AUD_PRICE_CHANGE;
     }
-    
-    // if (audPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -604,26 +639,22 @@ async function monitorPrice() {
     const batPrice = web3.utils.toWei(batAmount.toString(), 'Ether')
     console.log('BAT Price:', batPrice / 100000000000000000000000000, ' USD')
     BAT_PRICES.push(batPrice)
-    if (BAT_PRICES.length >= 10) {
-      if (BAT_PRICES[0] < BAT_PRICES[BAT_PRICES.length-1]){
-        console.log("BAT price went up %", ((BAT_PRICES[BAT_PRICES.length-1] - BAT_PRICES[0])/BAT_PRICES[0]) *100 );
+    if (BAT_PRICES.length >= 6) {
+      if (BAT_PRICES[0] < BAT_PRICES[BAT_PRICES.length - 1]) {
+        console.log("BAT price went up %", ((BAT_PRICES[BAT_PRICES.length - 1] - BAT_PRICES[0]) / BAT_PRICES[0]) * 100);
+        BAT_PRICE_CHANGE = ((BAT_PRICES[BAT_PRICES.length - 1] - BAT_PRICES[0]) / BAT_PRICES[0]) * 100;
       }
-      if (BAT_PRICES[0] > BAT_PRICES[BAT_PRICES.length-1]){
-        console.log("BAT price went down %", ((BAT_PRICES[0] - BAT_PRICES[BAT_PRICES.length-1])) *100 );
+      if (BAT_PRICES[0] > BAT_PRICES[BAT_PRICES.length - 1]) {
+        console.log("BAT price went down %", ((BAT_PRICES[0] - BAT_PRICES[BAT_PRICES.length - 1])) * 100);
+        BAT_PRICE_CHANGE = ((BAT_PRICES[0] - BAT_PRICES[BAT_PRICES.length - 1])) * -100;
       }
-      if (BAT_PRICES[0] == BAT_PRICES[BAT_PRICES.length-1]){
+      if (BAT_PRICES[0] == BAT_PRICES[BAT_PRICES.length - 1]) {
         console.log("BAT price didn't change");
+        BAT_PRICE_CHANGE = 0;
       }
-      BAT_PRICES.length=0;   
+      BAT_PRICES.pop[0];
+      priceChanges["BAT"] = BAT_PRICE_CHANGE;
     }
-    
-    // if (batPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -637,26 +668,22 @@ async function monitorPrice() {
     const bchPrice = web3.utils.toWei(bchAmount.toString(), 'Ether')
     console.log('BCH Price:', bchPrice / 100000000000000000000000000, ' USD')
     BCH_PRICES.push(bchPrice)
-    if (BCH_PRICES.length >= 10) {
-      if (BCH_PRICES[0] < BCH_PRICES[BCH_PRICES.length-1]){
-        console.log("BCH price went up %", ((BCH_PRICES[BCH_PRICES.length-1] - BCH_PRICES[0])/BCH_PRICES[0]) *100 );
+    if (BCH_PRICES.length >= 6) {
+      if (BCH_PRICES[0] < BCH_PRICES[BCH_PRICES.length - 1]) {
+        console.log("BCH price went up %", ((BCH_PRICES[BCH_PRICES.length - 1] - BCH_PRICES[0]) / BCH_PRICES[0]) * 100);
+        BCH_PRICE_CHANGE = ((BCH_PRICES[BCH_PRICES.length - 1] - BCH_PRICES[0]) / BCH_PRICES[0]) * 100;
       }
-      if (BCH_PRICES[0] > BCH_PRICES[BCH_PRICES.length-1]){
-        console.log("BCH price went down %", ((BCH_PRICES[0] - BCH_PRICES[BCH_PRICES.length-1])) *100 );
+      if (BCH_PRICES[0] > BCH_PRICES[BCH_PRICES.length - 1]) {
+        console.log("BCH price went down %", ((BCH_PRICES[0] - BCH_PRICES[BCH_PRICES.length - 1])) * 100);
+        BCH_PRICE_CHANGE = ((BCH_PRICES[0] - BCH_PRICES[BCH_PRICES.length - 1])) * -100;
       }
-      if (BCH_PRICES[0] == BCH_PRICES[BCH_PRICES.length-1]){
+      if (BCH_PRICES[0] == BCH_PRICES[BCH_PRICES.length - 1]) {
         console.log("BCH price didn't change");
+        BCH_PRICE_CHANGE = 0;
       }
-      BCH_PRICES.length=0;   
+      BCH_PRICES.pop[0];
+      priceChanges["BCH"] = BCH_PRICE_CHANGE;
     }
-    
-    // if (bchPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -670,26 +697,22 @@ async function monitorPrice() {
     const bhdPrice = web3.utils.toWei(bhdAmount.toString(), 'Ether')
     console.log('BHD Price:', bhdPrice / 100000000000000000000000000, ' USD')
     BHD_PRICES.push(bhdPrice)
-    if (BHD_PRICES.length >= 10) {
-      if (BHD_PRICES[0] < BHD_PRICES[BHD_PRICES.length-1]){
-        console.log("BHD price went up %", ((BHD_PRICES[BHD_PRICES.length-1] - BHD_PRICES[0])/BHD_PRICES[0]) *100 );
+    if (BHD_PRICES.length >= 6) {
+      if (BHD_PRICES[0] < BHD_PRICES[BHD_PRICES.length - 1]) {
+        console.log("BHD price went up %", ((BHD_PRICES[BHD_PRICES.length - 1] - BHD_PRICES[0]) / BHD_PRICES[0]) * 100);
+        BHD_PRICE_CHANGE = ((BHD_PRICES[BHD_PRICES.length - 1] - BHD_PRICES[0]) / BHD_PRICES[0]) * 100;
       }
-      if (BHD_PRICES[0] > BHD_PRICES[BHD_PRICES.length-1]){
-        console.log("BHD price went down %", ((BHD_PRICES[0] - BHD_PRICES[BHD_PRICES.length-1])) *100 );
+      if (BHD_PRICES[0] > BHD_PRICES[BHD_PRICES.length - 1]) {
+        console.log("BHD price went down %", ((BHD_PRICES[0] - BHD_PRICES[BHD_PRICES.length - 1])) * 100);
+        BHD_PRICE_CHANGE = ((BHD_PRICES[0] - BHD_PRICES[BHD_PRICES.length - 1])) * -100;
       }
-      if (BHD_PRICES[0] == BHD_PRICES[BHD_PRICES.length-1]){
+      if (BHD_PRICES[0] == BHD_PRICES[BHD_PRICES.length - 1]) {
         console.log("BHD price didn't change");
+        BHD_PRICE_CHANGE = 0;
       }
-      BHD_PRICES.length=0;   
+      BHD_PRICES.pop[0];
+      priceChanges["BHD"] = BHD_PRICE_CHANGE;
     }
-    
-    // if (bhdPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -703,26 +726,22 @@ async function monitorPrice() {
     const bnbPrice = web3.utils.toWei(bnbAmount.toString(), 'Ether')
     console.log('BNB Price:', bnbPrice / 100000000000000000000000000, ' USD')
     BNB_PRICES.push(bnbPrice)
-    if (BNB_PRICES.length >= 10) {
-      if (BNB_PRICES[0] < BNB_PRICES[BNB_PRICES.length-1]){
-        console.log("BNB price went up %", ((BNB_PRICES[BNB_PRICES.length-1] - BNB_PRICES[0])/BNB_PRICES[0]) *100 );
+    if (BNB_PRICES.length >= 6) {
+      if (BNB_PRICES[0] < BNB_PRICES[BNB_PRICES.length - 1]) {
+        console.log("BNB price went up %", ((BNB_PRICES[BNB_PRICES.length - 1] - BNB_PRICES[0]) / BNB_PRICES[0]) * 100);
+        BNB_PRICE_CHANGE = ((BNB_PRICES[BNB_PRICES.length - 1] - BNB_PRICES[0]) / BNB_PRICES[0]) * 100;
       }
-      if (BNB_PRICES[0] > BNB_PRICES[BNB_PRICES.length-1]){
-        console.log("BNB price went down %", ((BNB_PRICES[0] - BNB_PRICES[BNB_PRICES.length-1])) *100 );
+      if (BNB_PRICES[0] > BNB_PRICES[BNB_PRICES.length - 1]) {
+        console.log("BNB price went down %", ((BNB_PRICES[0] - BNB_PRICES[BNB_PRICES.length - 1])) * 100);
+        BNB_PRICE_CHANGE = ((BNB_PRICES[0] - BNB_PRICES[BNB_PRICES.length - 1])) * -100;
       }
-      if (BNB_PRICES[0] == BNB_PRICES[BNB_PRICES.length-1]){
+      if (BNB_PRICES[0] == BNB_PRICES[BNB_PRICES.length - 1]) {
         console.log("BNB price didn't change");
+        BNB_PRICE_CHANGE = 0;
       }
-      BNB_PRICES.length=0;   
+      BNB_PRICES.pop[0];
+      priceChanges["BNB"] = BNB_PRICE_CHANGE;
     }
-    
-    // if (bnbPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -736,26 +755,22 @@ async function monitorPrice() {
     const bntPrice = web3.utils.toWei(bntAmount.toString(), 'Ether')
     console.log('BNT Price:', bntPrice / 100000000000000000000000000, ' USD')
     BNT_PRICES.push(bntPrice)
-    if (BNT_PRICES.length >= 10) {
-      if (BNT_PRICES[0] < BNT_PRICES[BNT_PRICES.length-1]){
-        console.log("BNT price went up %", ((BNT_PRICES[BNT_PRICES.length-1] - BNT_PRICES[0])/BNT_PRICES[0]) *100 );
+    if (BNT_PRICES.length >= 6) {
+      if (BNT_PRICES[0] < BNT_PRICES[BNT_PRICES.length - 1]) {
+        console.log("BNT price went up %", ((BNT_PRICES[BNT_PRICES.length - 1] - BNT_PRICES[0]) / BNT_PRICES[0]) * 100);
+        BNT_PRICE_CHANGE = ((BNT_PRICES[BNT_PRICES.length - 1] - BNT_PRICES[0]) / BNT_PRICES[0]) * 100;
       }
-      if (BNT_PRICES[0] > BNT_PRICES[BNT_PRICES.length-1]){
-        console.log("BNT price went down %", ((BNT_PRICES[0] - BNT_PRICES[BNT_PRICES.length-1])) *100 );
+      if (BNT_PRICES[0] > BNT_PRICES[BNT_PRICES.length - 1]) {
+        console.log("BNT price went down %", ((BNT_PRICES[0] - BNT_PRICES[BNT_PRICES.length - 1])) * 100);
+        BNT_PRICE_CHANGE = ((BNT_PRICES[0] - BNT_PRICES[BNT_PRICES.length - 1])) * -100;
       }
-      if (BNT_PRICES[0] == BNT_PRICES[BNT_PRICES.length-1]){
+      if (BNT_PRICES[0] == BNT_PRICES[BNT_PRICES.length - 1]) {
         console.log("BNT price didn't change");
+        BNT_PRICE_CHANGE = 0;
       }
-      BNT_PRICES.length=0;   
+      BNT_PRICES.pop[0];
+      priceChanges["BNT"] = BNT_PRICE_CHANGE;
     }
-    
-    // if (bntPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -769,26 +784,22 @@ async function monitorPrice() {
     const bsvPrice = web3.utils.toWei(bsvAmount.toString(), 'Ether')
     console.log('BSV Price:', bsvPrice / 100000000000000000000000000, ' USD')
     BSV_PRICES.push(bsvPrice)
-    if (BSV_PRICES.length >= 10) {
-      if (BSV_PRICES[0] < BSV_PRICES[BSV_PRICES.length-1]){
-        console.log("BSV price went up %", ((BSV_PRICES[BSV_PRICES.length-1] - BSV_PRICES[0])/BSV_PRICES[0]) *100 );
+    if (BSV_PRICES.length >= 6) {
+      if (BSV_PRICES[0] < BSV_PRICES[BSV_PRICES.length - 1]) {
+        console.log("BSV price went up %", ((BSV_PRICES[BSV_PRICES.length - 1] - BSV_PRICES[0]) / BSV_PRICES[0]) * 100);
+        BSV_PRICE_CHANGE = ((BSV_PRICES[BSV_PRICES.length - 1] - BSV_PRICES[0]) / BSV_PRICES[0]) * 100;
       }
-      if (BSV_PRICES[0] > BSV_PRICES[BSV_PRICES.length-1]){
-        console.log("BSV price went down %", ((BSV_PRICES[0] - BSV_PRICES[BSV_PRICES.length-1])) *100 );
+      if (BSV_PRICES[0] > BSV_PRICES[BSV_PRICES.length - 1]) {
+        console.log("BSV price went down %", ((BSV_PRICES[0] - BSV_PRICES[BSV_PRICES.length - 1])) * 100);
+        BSV_PRICE_CHANGE = ((BSV_PRICES[0] - BSV_PRICES[BSV_PRICES.length - 1])) * -100;
       }
-      if (BSV_PRICES[0] == BSV_PRICES[BSV_PRICES.length-1]){
+      if (BSV_PRICES[0] == BSV_PRICES[BSV_PRICES.length - 1]) {
         console.log("BSV price didn't change");
+        BSV_PRICE_CHANGE = 0;
       }
-      BSV_PRICES.length=0;   
+      BSV_PRICES.pop[0];
+      priceChanges["BSV"] = BSV_PRICE_CHANGE;
     }
-    
-    // if (bsvPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -802,26 +813,25 @@ async function monitorPrice() {
     const btcPrice = web3.utils.toWei(btcAmount.toString(), 'Ether')
     console.log('BTC Price:', btcPrice / 100000000000000000000000000, ' USD')
     BTC_PRICES.push(btcPrice)
-    if (BTC_PRICES.length >= 10) {
-      if (BTC_PRICES[0] < BTC_PRICES[BTC_PRICES.length-1]){
-        console.log("BTC price went up %", ((BTC_PRICES[BTC_PRICES.length-1] - BTC_PRICES[0])/BTC_PRICES[0]) *100 );
+    if (BTC_PRICES.length >= 6) {
+      if (BTC_PRICES[0] < BTC_PRICES[BTC_PRICES.length - 1]) {
+        console.log("BTC price went up %", ((BTC_PRICES[BTC_PRICES.length - 1] - BTC_PRICES[0]) / BTC_PRICES[0]) * 100);
+        BTC_PRICE_CHANGE = ((BTC_PRICES[BTC_PRICES.length - 1] - BTC_PRICES[0]) / BTC_PRICES[0]) * 100;
       }
-      if (BTC_PRICES[0] > BTC_PRICES[BTC_PRICES.length-1]){
-        console.log("BTC price went down %", ((BTC_PRICES[0] - BTC_PRICES[BTC_PRICES.length-1])) *100 );
+      if (BTC_PRICES[0] > BTC_PRICES[BTC_PRICES.length - 1]) {
+        console.log("BTC price went down %", ((BTC_PRICES[0] - BTC_PRICES[BTC_PRICES.length - 1])) * 100);
+        BTC_PRICE_CHANGE = ((BTC_PRICES[0] - BTC_PRICES[BTC_PRICES.length - 1])) * -100;
       }
-      if (BTC_PRICES[0] == BTC_PRICES[BTC_PRICES.length-1]){
+      if (BTC_PRICES[0] == BTC_PRICES[BTC_PRICES.length - 1]) {
         console.log("BTC price didn't change");
+        BTC_PRICE_CHANGE = 0;
       }
-      BTC_PRICES.length=0;   
+      BTC_PRICES.pop[0];
+      priceChanges["BTC"] = BTC_PRICE_CHANGE;
     }
-    
+
     // if (btcPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
+
 
   } catch (error) {
     console.error(error)
@@ -830,51 +840,27 @@ async function monitorPrice() {
     return
   }
 
-  // try {
-  //   const btgAmount = await btgPriceContract.methods.latestAnswer().call()
-  //   const btgPrice = web3.utils.toWei(btgAmount.toString(), 'Ether')
-  //   console.log('BTG Price:', btgPrice / 100000000000000000000000000, ' USD')
-
-  //   // if (btgPrice <= ETH_SELL_PRICE) {
-  //   //   console.log('Selling Matic...')
-  //   //   await checkBalances()
-  //   //   await sellEth(ETH_AMOUNT, daiAmount)
-  //   //   await checkBalances()
-  //   //   clearInterval(priceMonitor)
-  //   // }
-
-  // } catch (error) {
-  //   console.error(error)
-  //   monitoringPrice = false
-  //   clearInterval(priceMonitor)
-  //   return
-  // }
-
   try {
     const cadAmount = await cadPriceContract.methods.latestAnswer().call()
     const cadPrice = web3.utils.toWei(cadAmount.toString(), 'Ether')
     console.log('CAD Price:', cadPrice / 100000000000000000000000000, ' USD')
     CAD_PRICES.push(cadPrice)
-    if (CAD_PRICES.length >= 10) {
-      if (CAD_PRICES[0] < CAD_PRICES[CAD_PRICES.length-1]){
-        console.log("CAD price went up %", ((CAD_PRICES[CAD_PRICES.length-1] - CAD_PRICES[0])/CAD_PRICES[0]) *100 );
+    if (CAD_PRICES.length >= 6) {
+      if (CAD_PRICES[0] < CAD_PRICES[CAD_PRICES.length - 1]) {
+        console.log("CAD price went up %", ((CAD_PRICES[CAD_PRICES.length - 1] - CAD_PRICES[0]) / CAD_PRICES[0]) * 100);
+        CAD_PRICE_CHANGE = ((CAD_PRICES[CAD_PRICES.length - 1] - CAD_PRICES[0]) / CAD_PRICES[0]) * 100;
       }
-      if (CAD_PRICES[0] > CAD_PRICES[CAD_PRICES.length-1]){
-        console.log("CAD price went down %", ((CAD_PRICES[0] - CAD_PRICES[CAD_PRICES.length-1])) *100 );
+      if (CAD_PRICES[0] > CAD_PRICES[CAD_PRICES.length - 1]) {
+        console.log("CAD price went down %", ((CAD_PRICES[0] - CAD_PRICES[CAD_PRICES.length - 1])) * 100);
+        CAD_PRICE_CHANGE = ((CAD_PRICES[0] - CAD_PRICES[CAD_PRICES.length - 1])) * -100;
       }
-      if (CAD_PRICES[0] == CAD_PRICES[CAD_PRICES.length-1]){
+      if (CAD_PRICES[0] == CAD_PRICES[CAD_PRICES.length - 1]) {
         console.log("CAD price didn't change");
+        CAD_PRICE_CHANGE = 0;
       }
-      CAD_PRICES.length=0;   
+      CAD_PRICES.pop[0];
+      priceChanges["CAD"] = CAD_PRICE_CHANGE;
     }
-    
-    // if (cadPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -888,26 +874,22 @@ async function monitorPrice() {
     const celPrice = web3.utils.toWei(celAmount.toString(), 'Ether')
     console.log('CEL Price:', celPrice / 100000000000000000000000000, ' USD')
     CEL_PRICES.push(celPrice)
-    if (CEL_PRICES.length >= 10) {
-      if (CEL_PRICES[0] < CEL_PRICES[CEL_PRICES.length-1]){
-        console.log("CEL price went up %", ((CEL_PRICES[CEL_PRICES.length-1] - CEL_PRICES[0])/CEL_PRICES[0]) *100 );
+    if (CEL_PRICES.length >= 6) {
+      if (CEL_PRICES[0] < CEL_PRICES[CEL_PRICES.length - 1]) {
+        console.log("CEL price went up %", ((CEL_PRICES[CEL_PRICES.length - 1] - CEL_PRICES[0]) / CEL_PRICES[0]) * 100);
+        CEL_PRICE_CHANGE = ((CEL_PRICES[CEL_PRICES.length - 1] - CEL_PRICES[0]) / CEL_PRICES[0]) * 100;
       }
-      if (CEL_PRICES[0] > CEL_PRICES[CEL_PRICES.length-1]){
-        console.log("CEL price went down %", ((CEL_PRICES[0] - CEL_PRICES[CEL_PRICES.length-1])) *100 );
+      if (CEL_PRICES[0] > CEL_PRICES[CEL_PRICES.length - 1]) {
+        console.log("CEL price went down %", ((CEL_PRICES[0] - CEL_PRICES[CEL_PRICES.length - 1])) * 100);
+        CEL_PRICE_CHANGE = ((CEL_PRICES[0] - CEL_PRICES[CEL_PRICES.length - 1])) * -100;
       }
-      if (CEL_PRICES[0] == CEL_PRICES[CEL_PRICES.length-1]){
+      if (CEL_PRICES[0] == CEL_PRICES[CEL_PRICES.length - 1]) {
         console.log("CEL price didn't change");
+        CEL_PRICE_CHANGE = 0;
       }
-      CEL_PRICES.length=0;   
+      CEL_PRICES.pop[0];
+      priceChanges["CEL"] = CEL_PRICE_CHANGE;
     }
-    
-    // if (celPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -921,26 +903,22 @@ async function monitorPrice() {
     const chzPrice = web3.utils.toWei(chzAmount.toString(), 'Ether')
     console.log('CHZ Price:', chzPrice / 100000000000000000000000000, ' USD')
     CHZ_PRICES.push(chzPrice)
-    if (CHZ_PRICES.length >= 10) {
-      if (CHZ_PRICES[0] < CHZ_PRICES[CHZ_PRICES.length-1]){
-        console.log("CHZ price went up %", ((CHZ_PRICES[CHZ_PRICES.length-1] - CHZ_PRICES[0])/CHZ_PRICES[0]) *100 );
+    if (CHZ_PRICES.length >= 6) {
+      if (CHZ_PRICES[0] < CHZ_PRICES[CHZ_PRICES.length - 1]) {
+        console.log("CHZ price went up %", ((CHZ_PRICES[CHZ_PRICES.length - 1] - CHZ_PRICES[0]) / CHZ_PRICES[0]) * 100);
+        CHZ_PRICE_CHANGE = ((CHZ_PRICES[CHZ_PRICES.length - 1] - CHZ_PRICES[0]) / CHZ_PRICES[0]) * 100;
       }
-      if (CHZ_PRICES[0] > CHZ_PRICES[CHZ_PRICES.length-1]){
-        console.log("CHZ price went down %", ((CHZ_PRICES[0] - CHZ_PRICES[CHZ_PRICES.length-1])) *100 );
+      if (CHZ_PRICES[0] > CHZ_PRICES[CHZ_PRICES.length - 1]) {
+        console.log("CHZ price went down %", ((CHZ_PRICES[0] - CHZ_PRICES[CHZ_PRICES.length - 1])) * 100);
+        CHZ_PRICE_CHANGE = ((CHZ_PRICES[0] - CHZ_PRICES[CHZ_PRICES.length - 1])) * -100;
       }
-      if (CHZ_PRICES[0] == CHZ_PRICES[CHZ_PRICES.length-1]){
+      if (CHZ_PRICES[0] == CHZ_PRICES[CHZ_PRICES.length - 1]) {
         console.log("CHZ price didn't change");
+        CHZ_PRICE_CHANGE = 0;
       }
-      CHZ_PRICES.length=0;   
+      CHZ_PRICES.pop[0];
+      priceChanges["CHZ"] = CHZ_PRICE_CHANGE;
     }
-    
-    // if (chzPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -954,26 +932,22 @@ async function monitorPrice() {
     const compPrice = web3.utils.toWei(compAmount.toString(), 'Ether')
     console.log('COMP Price:', compPrice / 100000000000000000000000000, ' USD')
     COMP_PRICES.push(compPrice)
-    if (COMP_PRICES.length >= 10) {
-      if (COMP_PRICES[0] < COMP_PRICES[COMP_PRICES.length-1]){
-        console.log("COMP price went up %", ((COMP_PRICES[COMP_PRICES.length-1] - COMP_PRICES[0])/COMP_PRICES[0]) *100 );
+    if (COMP_PRICES.length >= 6) {
+      if (COMP_PRICES[0] < COMP_PRICES[COMP_PRICES.length - 1]) {
+        console.log("COMP price went up %", ((COMP_PRICES[COMP_PRICES.length - 1] - COMP_PRICES[0]) / COMP_PRICES[0]) * 100);
+        COMP_PRICE_CHANGE = ((COMP_PRICES[COMP_PRICES.length - 1] - COMP_PRICES[0]) / COMP_PRICES[0]) * 100;
       }
-      if (COMP_PRICES[0] > COMP_PRICES[COMP_PRICES.length-1]){
-        console.log("COMP price went down %", ((COMP_PRICES[0] - COMP_PRICES[COMP_PRICES.length-1])) *100 );
+      if (COMP_PRICES[0] > COMP_PRICES[COMP_PRICES.length - 1]) {
+        console.log("COMP price went down %", ((COMP_PRICES[0] - COMP_PRICES[COMP_PRICES.length - 1])) * 100);
+        COMP_PRICE_CHANGE = ((COMP_PRICES[0] - COMP_PRICES[COMP_PRICES.length - 1])) * -100;
       }
-      if (COMP_PRICES[0] == COMP_PRICES[COMP_PRICES.length-1]){
+      if (COMP_PRICES[0] == COMP_PRICES[COMP_PRICES.length - 1]) {
         console.log("COMP price didn't change");
+        COMP_PRICE_CHANGE = 0;
       }
-      COMP_PRICES.length=0;   
+      COMP_PRICES.pop[0];
+      priceChanges["COMP"] = COMP_PRICE_CHANGE;
     }
-    
-    // if (compPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -987,26 +961,22 @@ async function monitorPrice() {
     const dashPrice = web3.utils.toWei(dashAmount.toString(), 'Ether')
     console.log('DASH Price:', dashPrice / 100000000000000000000000000, ' USD')
     DASH_PRICES.push(dashPrice)
-    if (DASH_PRICES.length >= 10) {
-      if (DASH_PRICES[0] < DASH_PRICES[DASH_PRICES.length-1]){
-        console.log("DASH price went up %", ((DASH_PRICES[DASH_PRICES.length-1] - DASH_PRICES[0])/DASH_PRICES[0]) *100 );
+    if (DASH_PRICES.length >= 6) {
+      if (DASH_PRICES[0] < DASH_PRICES[DASH_PRICES.length - 1]) {
+        console.log("DASH price went up %", ((DASH_PRICES[DASH_PRICES.length - 1] - DASH_PRICES[0]) / DASH_PRICES[0]) * 100);
+        DASH_PRICE_CHANGE = ((DASH_PRICES[DASH_PRICES.length - 1] - DASH_PRICES[0]) / DASH_PRICES[0]) * 100;
       }
-      if (DASH_PRICES[0] > DASH_PRICES[DASH_PRICES.length-1]){
-        console.log("DASH price went down %", ((DASH_PRICES[0] - DASH_PRICES[DASH_PRICES.length-1])) *100 );
+      if (DASH_PRICES[0] > DASH_PRICES[DASH_PRICES.length - 1]) {
+        console.log("DASH price went down %", ((DASH_PRICES[0] - DASH_PRICES[DASH_PRICES.length - 1])) * 100);
+        DASH_PRICE_CHANGE = ((DASH_PRICES[0] - DASH_PRICES[DASH_PRICES.length - 1])) * -100;
       }
-      if (DASH_PRICES[0] == DASH_PRICES[DASH_PRICES.length-1]){
+      if (DASH_PRICES[0] == DASH_PRICES[DASH_PRICES.length - 1]) {
         console.log("DASH price didn't change");
+        DASH_PRICE_CHANGE = 0;
       }
-      DASH_PRICES.length=0;   
+      DASH_PRICES.pop[0];
+      priceChanges["DASH"] = DASH_PRICE_CHANGE;
     }
-    
-    // if (dashPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1020,26 +990,22 @@ async function monitorPrice() {
     const dogePrice = web3.utils.toWei(dogeAmount.toString(), 'Ether')
     console.log('DOGE Price:', dogePrice / 100000000000000000000000000, ' USD')
     DOGE_PRICES.push(dogePrice)
-    if (DOGE_PRICES.length >= 10) {
-      if (DOGE_PRICES[0] < DOGE_PRICES[DOGE_PRICES.length-1]){
-        console.log("DOGE price went up %", ((DOGE_PRICES[DOGE_PRICES.length-1] - DOGE_PRICES[0])/DOGE_PRICES[0]) *100 );
+    if (DOGE_PRICES.length >= 6) {
+      if (DOGE_PRICES[0] < DOGE_PRICES[DOGE_PRICES.length - 1]) {
+        console.log("DOGE price went up %", ((DOGE_PRICES[DOGE_PRICES.length - 1] - DOGE_PRICES[0]) / DOGE_PRICES[0]) * 100);
+        DOGE_PRICE_CHANGE = ((DOGE_PRICES[DOGE_PRICES.length - 1] - DOGE_PRICES[0]) / DOGE_PRICES[0]) * 100;
       }
-      if (DOGE_PRICES[0] > DOGE_PRICES[DOGE_PRICES.length-1]){
-        console.log("DOGE price went down %", ((DOGE_PRICES[0] - DOGE_PRICES[DOGE_PRICES.length-1])) *100 );
+      if (DOGE_PRICES[0] > DOGE_PRICES[DOGE_PRICES.length - 1]) {
+        console.log("DOGE price went down %", ((DOGE_PRICES[0] - DOGE_PRICES[DOGE_PRICES.length - 1])) * 100);
+        DOGE_PRICE_CHANGE = ((DOGE_PRICES[0] - DOGE_PRICES[DOGE_PRICES.length - 1])) * -100;
       }
-      if (DOGE_PRICES[0] == DOGE_PRICES[DOGE_PRICES.length-1]){
+      if (DOGE_PRICES[0] == DOGE_PRICES[DOGE_PRICES.length - 1]) {
         console.log("DOGE price didn't change");
+        DOGE_PRICE_CHANGE = 0;
       }
-      DOGE_PRICES.length=0;   
+      DOGE_PRICES.pop[0];
+      priceChanges["DOGE"] = DOGE_PRICE_CHANGE;
     }
-    
-    // if (dogePrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1053,26 +1019,22 @@ async function monitorPrice() {
     const dotPrice = web3.utils.toWei(dotAmount.toString(), 'Ether')
     console.log('DOT Price:', dotPrice / 100000000000000000000000000, ' USD')
     DOT_PRICES.push(dotPrice)
-    if (DOT_PRICES.length >= 10) {
-      if (DOT_PRICES[0] < DOT_PRICES[DOT_PRICES.length-1]){
-        console.log("DOT price went up %", ((DOT_PRICES[DOT_PRICES.length-1] - DOT_PRICES[0])/DOT_PRICES[0]) *100 );
+    if (DOT_PRICES.length >= 6) {
+      if (DOT_PRICES[0] < DOT_PRICES[DOT_PRICES.length - 1]) {
+        console.log("DOT price went up %", ((DOT_PRICES[DOT_PRICES.length - 1] - DOT_PRICES[0]) / DOT_PRICES[0]) * 100);
+        DOT_PRICE_CHANGE = ((DOT_PRICES[DOT_PRICES.length - 1] - DOT_PRICES[0]) / DOT_PRICES[0]) * 100;
       }
-      if (DOT_PRICES[0] > DOT_PRICES[DOT_PRICES.length-1]){
-        console.log("DOT price went down %", ((DOT_PRICES[0] - DOT_PRICES[DOT_PRICES.length-1])) *100 );
+      if (DOT_PRICES[0] > DOT_PRICES[DOT_PRICES.length - 1]) {
+        console.log("DOT price went down %", ((DOT_PRICES[0] - DOT_PRICES[DOT_PRICES.length - 1])) * 100);
+        DOT_PRICE_CHANGE = ((DOT_PRICES[0] - DOT_PRICES[DOT_PRICES.length - 1])) * -100;
       }
-      if (DOT_PRICES[0] == DOT_PRICES[DOT_PRICES.length-1]){
+      if (DOT_PRICES[0] == DOT_PRICES[DOT_PRICES.length - 1]) {
         console.log("DOT price didn't change");
+        DOT_PRICE_CHANGE = 0;
       }
-      DOT_PRICES.length=0;   
+      DOT_PRICES.pop[0];
+      priceChanges["DOT"] = DOT_PRICE_CHANGE;
     }
-    
-    // if (dotPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1086,26 +1048,22 @@ async function monitorPrice() {
     const enjPrice = web3.utils.toWei(enjAmount.toString(), 'Ether')
     console.log('ENJ Price:', enjPrice / 100000000000000000000000000, ' USD')
     ENJ_PRICES.push(enjPrice)
-    if (ENJ_PRICES.length >= 10) {
-      if (ENJ_PRICES[0] < ENJ_PRICES[ENJ_PRICES.length-1]){
-        console.log("ENJ price went up %", ((ENJ_PRICES[ENJ_PRICES.length-1] - ENJ_PRICES[0])/ENJ_PRICES[0]) *100 );
+    if (ENJ_PRICES.length >= 6) {
+      if (ENJ_PRICES[0] < ENJ_PRICES[ENJ_PRICES.length - 1]) {
+        console.log("ENJ price went up %", ((ENJ_PRICES[ENJ_PRICES.length - 1] - ENJ_PRICES[0]) / ENJ_PRICES[0]) * 100);
+        ENJ_PRICE_CHANGE = ((ENJ_PRICES[ENJ_PRICES.length - 1] - ENJ_PRICES[0]) / ENJ_PRICES[0]) * 100;
       }
-      if (ENJ_PRICES[0] > ENJ_PRICES[ENJ_PRICES.length-1]){
-        console.log("ENJ price went down %", ((ENJ_PRICES[0] - ENJ_PRICES[ENJ_PRICES.length-1])) *100 );
+      if (ENJ_PRICES[0] > ENJ_PRICES[ENJ_PRICES.length - 1]) {
+        console.log("ENJ price went down %", ((ENJ_PRICES[0] - ENJ_PRICES[ENJ_PRICES.length - 1])) * 100);
+        ENJ_PRICE_CHANGE = ((ENJ_PRICES[0] - ENJ_PRICES[ENJ_PRICES.length - 1])) * -100;
       }
-      if (ENJ_PRICES[0] == ENJ_PRICES[ENJ_PRICES.length-1]){
+      if (ENJ_PRICES[0] == ENJ_PRICES[ENJ_PRICES.length - 1]) {
         console.log("ENJ price didn't change");
+        ENJ_PRICE_CHANGE = 0;
       }
-      ENJ_PRICES.length=0;   
+      ENJ_PRICES.pop[0];
+      priceChanges["ENJ"] = ENJ_PRICE_CHANGE;
     }
-    
-    // if (enjPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1119,26 +1077,22 @@ async function monitorPrice() {
     const eosPrice = web3.utils.toWei(eosAmount.toString(), 'Ether')
     console.log('EOS Price:', eosPrice / 100000000000000000000000000, ' USD')
     EOS_PRICES.push(eosPrice)
-    if (EOS_PRICES.length >= 10) {
-      if (EOS_PRICES[0] < EOS_PRICES[EOS_PRICES.length-1]){
-        console.log("EOS price went up %", ((EOS_PRICES[EOS_PRICES.length-1] - EOS_PRICES[0])/EOS_PRICES[0]) *100 );
+    if (EOS_PRICES.length >= 6) {
+      if (EOS_PRICES[0] < EOS_PRICES[EOS_PRICES.length - 1]) {
+        console.log("EOS price went up %", ((EOS_PRICES[EOS_PRICES.length - 1] - EOS_PRICES[0]) / EOS_PRICES[0]) * 100);
+        EOS_PRICE_CHANGE = ((EOS_PRICES[EOS_PRICES.length - 1] - EOS_PRICES[0]) / EOS_PRICES[0]) * 100;
       }
-      if (EOS_PRICES[0] > EOS_PRICES[EOS_PRICES.length-1]){
-        console.log("EOS price went down %", ((EOS_PRICES[0] - EOS_PRICES[EOS_PRICES.length-1])) *100 );
+      if (EOS_PRICES[0] > EOS_PRICES[EOS_PRICES.length - 1]) {
+        console.log("EOS price went down %", ((EOS_PRICES[0] - EOS_PRICES[EOS_PRICES.length - 1])) * 100);
+        EOS_PRICE_CHANGE = ((EOS_PRICES[0] - EOS_PRICES[EOS_PRICES.length - 1])) * -100;
       }
-      if (EOS_PRICES[0] == EOS_PRICES[EOS_PRICES.length-1]){
+      if (EOS_PRICES[0] == EOS_PRICES[EOS_PRICES.length - 1]) {
         console.log("EOS price didn't change");
+        EOS_PRICE_CHANGE = 0;
       }
-      EOS_PRICES.length=0;   
+      EOS_PRICES.pop[0];
+      priceChanges["EOS"] = EOS_PRICE_CHANGE;
     }
-    
-    // if (eosPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1152,26 +1106,22 @@ async function monitorPrice() {
     const etcPrice = web3.utils.toWei(etcAmount.toString(), 'Ether')
     console.log('ETC Price:', etcPrice / 100000000000000000000000000, ' USD')
     ETC_PRICES.push(etcPrice)
-    if (ETC_PRICES.length >= 10) {
-      if (ETC_PRICES[0] < ETC_PRICES[ETC_PRICES.length-1]){
-        console.log("ETC price went up %", ((ETC_PRICES[ETC_PRICES.length-1] - ETC_PRICES[0])/ETC_PRICES[0]) *100 );
+    if (ETC_PRICES.length >= 6) {
+      if (ETC_PRICES[0] < ETC_PRICES[ETC_PRICES.length - 1]) {
+        console.log("ETC price went up %", ((ETC_PRICES[ETC_PRICES.length - 1] - ETC_PRICES[0]) / ETC_PRICES[0]) * 100);
+        ETC_PRICE_CHANGE = ((ETC_PRICES[ETC_PRICES.length - 1] - ETC_PRICES[0]) / ETC_PRICES[0]) * 100;
       }
-      if (ETC_PRICES[0] > ETC_PRICES[ETC_PRICES.length-1]){
-        console.log("ETC price went down %", ((ETC_PRICES[0] - ETC_PRICES[ETC_PRICES.length-1])) *100 );
+      if (ETC_PRICES[0] > ETC_PRICES[ETC_PRICES.length - 1]) {
+        console.log("ETC price went down %", ((ETC_PRICES[0] - ETC_PRICES[ETC_PRICES.length - 1])) * 100);
+        ETC_PRICE_CHANGE = ((ETC_PRICES[0] - ETC_PRICES[ETC_PRICES.length - 1])) * -100;
       }
-      if (ETC_PRICES[0] == ETC_PRICES[ETC_PRICES.length-1]){
+      if (ETC_PRICES[0] == ETC_PRICES[ETC_PRICES.length - 1]) {
         console.log("ETC price didn't change");
+        ETC_PRICE_CHANGE = 0;
       }
-      ETC_PRICES.length=0;   
+      ETC_PRICES.pop[0];
+      priceChanges["ETC"] = ETC_PRICE_CHANGE;
     }
-
-    // if (etcPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1182,29 +1132,25 @@ async function monitorPrice() {
 
   try {
     const ethAmount = await ethPriceContract.methods.latestAnswer().call()
-    const ethPrice = web3.utils.toWei(ethAmount.toString(), 'Ether')
+    const ethPrice = web3.utils.toWei(ethAmount, 'ether')
     console.log('ETH Price:', ethPrice / 100000000000000000000000000, ' USD')
     ETH_PRICES.push(ethPrice)
-    if (ETH_PRICES.length >= 10) {
-      if (ETH_PRICES[0] < ETH_PRICES[ETH_PRICES.length-1]){
-        console.log("ETH price went up %", ((ETH_PRICES[ETH_PRICES.length-1] - ETH_PRICES[0])/ETH_PRICES[0]) *100 );
+    if (ETH_PRICES.length >= 6) {
+      if (ETH_PRICES[0] < ETH_PRICES[ETH_PRICES.length - 1]) {
+        console.log("ETH price went up %", ((ETH_PRICES[ETH_PRICES.length - 1] - ETH_PRICES[0]) / ETH_PRICES[0]) * 100);
+        ETH_PRICE_CHANGE = ((ETH_PRICES[ETH_PRICES.length - 1] - ETH_PRICES[0]) / ETH_PRICES[0]) * 100;
       }
-      if (ETH_PRICES[0] > ETH_PRICES[ETH_PRICES.length-1]){
-        console.log("ETH price went down %", ((ETH_PRICES[0] - ETH_PRICES[ETH_PRICES.length-1])) *100 );
+      if (ETH_PRICES[0] > ETH_PRICES[ETH_PRICES.length - 1]) {
+        console.log("ETH price went down %", ((ETH_PRICES[0] - ETH_PRICES[ETH_PRICES.length - 1])) * 100);
+        ETH_PRICE_CHANGE = ((ETH_PRICES[0] - ETH_PRICES[ETH_PRICES.length - 1])) * -100;
       }
-      if (ETH_PRICES[0] == ETH_PRICES[ETH_PRICES.length-1]){
+      if (ETH_PRICES[0] == ETH_PRICES[ETH_PRICES.length - 1]) {
         console.log("ETH price didn't change");
+        ETH_PRICE_CHANGE = 0;
       }
-      ETH_PRICES.length=0;   
+      ETH_PRICES.pop[0];
+      priceChanges["ETH"] = ETH_PRICE_CHANGE;
     }
-
-    // if (ethPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1218,26 +1164,22 @@ async function monitorPrice() {
     const gbpPrice = web3.utils.toWei(gbpAmount.toString(), 'ether')
     console.log('GBP Price:', gbpPrice / 100000000000000000000000000, ' USD')
     GBP_PRICES.push(gbpPrice)
-    if (GBP_PRICES.length >= 10) {
-      if (GBP_PRICES[0] < GBP_PRICES[GBP_PRICES.length-1]){
-        console.log("GBP price went up %", ((GBP_PRICES[GBP_PRICES.length-1] - GBP_PRICES[0])/GBP_PRICES[0]) *100 );
+    if (GBP_PRICES.length >= 6) {
+      if (GBP_PRICES[0] < GBP_PRICES[GBP_PRICES.length - 1]) {
+        console.log("GBP price went up %", ((GBP_PRICES[GBP_PRICES.length - 1] - GBP_PRICES[0]) / GBP_PRICES[0]) * 100);
+        GBP_PRICE_CHANGE = ((GBP_PRICES[GBP_PRICES.length - 1] - GBP_PRICES[0]) / GBP_PRICES[0]) * 100;
       }
-      if (GBP_PRICES[0] > GBP_PRICES[GBP_PRICES.length-1]){
-        console.log("GBP price went down %", ((GBP_PRICES[0] - GBP_PRICES[GBP_PRICES.length-1])) *100 );
+      if (GBP_PRICES[0] > GBP_PRICES[GBP_PRICES.length - 1]) {
+        console.log("GBP price went down %", ((GBP_PRICES[0] - GBP_PRICES[GBP_PRICES.length - 1])) * 100);
+        GBP_PRICE_CHANGE = ((GBP_PRICES[0] - GBP_PRICES[GBP_PRICES.length - 1])) * -100;
       }
-      if (GBP_PRICES[0] == GBP_PRICES[GBP_PRICES.length-1]){
+      if (GBP_PRICES[0] == GBP_PRICES[GBP_PRICES.length - 1]) {
         console.log("GBP price didn't change");
+        GBP_PRICE_CHANGE = 0;
       }
-      GBP_PRICES.length=0;   
+      GBP_PRICES.pop[0];
+      priceChanges["GBP"] = GBP_PRICE_CHANGE;
     }
-
-    // if (gbpPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1251,25 +1193,22 @@ async function monitorPrice() {
     const grtPrice = web3.utils.toWei(grtAmount.toString(), 'ether')
     console.log('GRT Price:', grtPrice / 100000000000000000000000000, ' USD')
     GRT_PRICES.push(grtPrice)
-    if (GRT_PRICES.length >= 10) {
-      if (GRT_PRICES[0] < GRT_PRICES[GRT_PRICES.length-1]){
-        console.log("GRT price went up %", ((GRT_PRICES[GRT_PRICES.length-1] - GRT_PRICES[0])/GRT_PRICES[0]) *100 );
+    if (GRT_PRICES.length >= 6) {
+      if (GRT_PRICES[0] < GRT_PRICES[GRT_PRICES.length - 1]) {
+        console.log("GRT price went up %", ((GRT_PRICES[GRT_PRICES.length - 1] - GRT_PRICES[0]) / GRT_PRICES[0]) * 100);
+        GRT_PRICE_CHANGE = ((GRT_PRICES[GRT_PRICES.length - 1] - GRT_PRICES[0]) / GRT_PRICES[0]) * 100;
       }
-      if (GRT_PRICES[0] > GRT_PRICES[GRT_PRICES.length-1]){
-        console.log("GRT price went down %", ((GRT_PRICES[0] - GRT_PRICES[GRT_PRICES.length-1])) *100 );
+      if (GRT_PRICES[0] > GRT_PRICES[GRT_PRICES.length - 1]) {
+        console.log("GRT price went down %", ((GRT_PRICES[0] - GRT_PRICES[GRT_PRICES.length - 1])) * 100);
+        GRT_PRICE_CHANGE = ((GRT_PRICES[0] - GRT_PRICES[GRT_PRICES.length - 1])) * -100;
       }
-      if (GRT_PRICES[0] == GRT_PRICES[GRT_PRICES.length-1]){
+      if (GRT_PRICES[0] == GRT_PRICES[GRT_PRICES.length - 1]) {
         console.log("GRT price didn't change");
+        GRT_PRICE_CHANGE = 0;
       }
-      GRT_PRICES.length=0;   
+      GRT_PRICES.pop[0];
+      priceChanges["GRT"] = GRT_PRICE_CHANGE;
     }
-    // if (grtPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1283,26 +1222,22 @@ async function monitorPrice() {
     const htPrice = web3.utils.toWei(htAmount.toString(), 'ether')
     console.log('HT Price:', htPrice / 100000000000000000000000000, ' USD')
     HT_PRICES.push(htPrice)
-    if (HT_PRICES.length >= 10) {
-      if (HT_PRICES[0] < HT_PRICES[HT_PRICES.length-1]){
-        console.log("HT price went up %", ((HT_PRICES[HT_PRICES.length-1] - HT_PRICES[0])/HT_PRICES[0]) *100 );
+    if (HT_PRICES.length >= 6) {
+      if (HT_PRICES[0] < HT_PRICES[HT_PRICES.length - 1]) {
+        console.log("HT price went up %", ((HT_PRICES[HT_PRICES.length - 1] - HT_PRICES[0]) / HT_PRICES[0]) * 100);
+        HT_PRICE_CHANGE = ((HT_PRICES[HT_PRICES.length - 1] - HT_PRICES[0]) / HT_PRICES[0]) * 100;
       }
-      if (HT_PRICES[0] > HT_PRICES[HT_PRICES.length-1]){
-        console.log("HT price went down %", ((HT_PRICES[0] - HT_PRICES[HT_PRICES.length-1])) *100 );
+      if (HT_PRICES[0] > HT_PRICES[HT_PRICES.length - 1]) {
+        console.log("HT price went down %", ((HT_PRICES[0] - HT_PRICES[HT_PRICES.length - 1])) * 100);
+        HT_PRICE_CHANGE = ((HT_PRICES[0] - HT_PRICES[HT_PRICES.length - 1])) * -100;
       }
-      if (HT_PRICES[0] == HT_PRICES[HT_PRICES.length-1]){
+      if (HT_PRICES[0] == HT_PRICES[HT_PRICES.length - 1]) {
         console.log("HT price didn't change");
+        HT_PRICE_CHANGE = 0;
       }
-      HT_PRICES.length=0;   
+      HT_PRICES.pop[0];
+      priceChanges["HT"] = HT_PRICE_CHANGE;
     }
-
-    // if (htPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1316,26 +1251,22 @@ async function monitorPrice() {
     const icpPrice = web3.utils.toWei(icpAmount.toString(), 'ether')
     console.log('ICP Price:', icpPrice / 100000000000000000000000000, ' USD')
     ICP_PRICES.push(icpPrice)
-    if (ICP_PRICES.length >= 10) {
-      if (ICP_PRICES[0] < ICP_PRICES[ICP_PRICES.length-1]){
-        console.log("ICP price went up %", ((ICP_PRICES[ICP_PRICES.length-1] - ICP_PRICES[0])/ICP_PRICES[0]) *100 );
+    if (ICP_PRICES.length >= 6) {
+      if (ICP_PRICES[0] < ICP_PRICES[ICP_PRICES.length - 1]) {
+        console.log("ICP price went up %", ((ICP_PRICES[ICP_PRICES.length - 1] - ICP_PRICES[0]) / ICP_PRICES[0]) * 100);
+        ICP_PRICE_CHANGE = ((ICP_PRICES[ICP_PRICES.length - 1] - ICP_PRICES[0]) / ICP_PRICES[0]) * 100;
       }
-      if (ICP_PRICES[0] > ICP_PRICES[ICP_PRICES.length-1]){
-        console.log("ICP price went down %", ((ICP_PRICES[0] - ICP_PRICES[ICP_PRICES.length-1])) *100 );
+      if (ICP_PRICES[0] > ICP_PRICES[ICP_PRICES.length - 1]) {
+        console.log("ICP price went down %", ((ICP_PRICES[0] - ICP_PRICES[ICP_PRICES.length - 1])) * 100);
+        ICP_PRICE_CHANGE = ((ICP_PRICES[0] - ICP_PRICES[ICP_PRICES.length - 1])) * -100;
       }
-      if (ICP_PRICES[0] == ICP_PRICES[ICP_PRICES.length-1]){
+      if (ICP_PRICES[0] == ICP_PRICES[ICP_PRICES.length - 1]) {
         console.log("ICP price didn't change");
+        ICP_PRICE_CHANGE = 0;
       }
-      ICP_PRICES.length=0;   
+      ICP_PRICES.pop[0];
+      priceChanges["ICP"] = ICP_PRICE_CHANGE;
     }
-
-    // if (icpPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1349,26 +1280,22 @@ async function monitorPrice() {
     const kncPrice = web3.utils.toWei(kncAmount.toString(), 'ether')
     console.log('KNC Price:', kncPrice / 100000000000000000000000000, ' USD')
     KNC_PRICES.push(kncPrice)
-    if (KNC_PRICES.length >= 10) {
-      if (KNC_PRICES[0] < KNC_PRICES[KNC_PRICES.length-1]){
-        console.log("KNC price went up %", ((KNC_PRICES[KNC_PRICES.length-1] - KNC_PRICES[0])/KNC_PRICES[0]) *100 );
+    if (KNC_PRICES.length >= 6) {
+      if (KNC_PRICES[0] < KNC_PRICES[KNC_PRICES.length - 1]) {
+        console.log("KNC price went up %", ((KNC_PRICES[KNC_PRICES.length - 1] - KNC_PRICES[0]) / KNC_PRICES[0]) * 100);
+        KNC_PRICE_CHANGE = ((KNC_PRICES[KNC_PRICES.length - 1] - KNC_PRICES[0]) / KNC_PRICES[0]) * 100;
       }
-      if (KNC_PRICES[0] > KNC_PRICES[KNC_PRICES.length-1]){
-        console.log("KNC price went down %", ((KNC_PRICES[0] - KNC_PRICES[KNC_PRICES.length-1])) *100 );
+      if (KNC_PRICES[0] > KNC_PRICES[KNC_PRICES.length - 1]) {
+        console.log("KNC price went down %", ((KNC_PRICES[0] - KNC_PRICES[KNC_PRICES.length - 1])) * 100);
+        KNC_PRICE_CHANGE = ((KNC_PRICES[0] - KNC_PRICES[KNC_PRICES.length - 1])) * -100;
       }
-      if (KNC_PRICES[0] == KNC_PRICES[KNC_PRICES.length-1]){
+      if (KNC_PRICES[0] == KNC_PRICES[KNC_PRICES.length - 1]) {
         console.log("KNC price didn't change");
+        KNC_PRICE_CHANGE = 0;
       }
-      KNC_PRICES.length=0;   
+      KNC_PRICES.pop[0];
+      priceChanges["KNC"] = KNC_PRICE_CHANGE;
     }
-
-    // if (kncPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1382,26 +1309,22 @@ async function monitorPrice() {
     const linkPrice = web3.utils.toWei(linkAmount.toString(), 'ether')
     console.log('LINK Price:', linkPrice / 100000000000000000000000000, ' USD')
     LINK_PRICES.push(linkPrice)
-    if (LINK_PRICES.length >= 10) {
-      if (LINK_PRICES[0] < LINK_PRICES[LINK_PRICES.length-1]){
-        console.log("LINK price went up %", ((LINK_PRICES[LINK_PRICES.length-1] - LINK_PRICES[0])/LINK_PRICES[0]) *100 );
+    if (LINK_PRICES.length >= 6) {
+      if (LINK_PRICES[0] < LINK_PRICES[LINK_PRICES.length - 1]) {
+        console.log("LINK price went up %", ((LINK_PRICES[LINK_PRICES.length - 1] - LINK_PRICES[0]) / LINK_PRICES[0]) * 100);
+        LINK_PRICE_CHANGE = ((LINK_PRICES[LINK_PRICES.length - 1] - LINK_PRICES[0]) / LINK_PRICES[0]) * 100;
       }
-      if (LINK_PRICES[0] > LINK_PRICES[LINK_PRICES.length-1]){
-        console.log("LINK price went down %", ((LINK_PRICES[0] - LINK_PRICES[LINK_PRICES.length-1])) *100 );
+      if (LINK_PRICES[0] > LINK_PRICES[LINK_PRICES.length - 1]) {
+        console.log("LINK price went down %", ((LINK_PRICES[0] - LINK_PRICES[LINK_PRICES.length - 1])) * 100);
+        LINK_PRICE_CHANGE = ((LINK_PRICES[0] - LINK_PRICES[LINK_PRICES.length - 1])) * -100;
       }
-      if (LINK_PRICES[0] == LINK_PRICES[LINK_PRICES.length-1]){
+      if (LINK_PRICES[0] == LINK_PRICES[LINK_PRICES.length - 1]) {
         console.log("LINK price didn't change");
+        LINK_PRICE_CHANGE = 0;
       }
-      LINK_PRICES.length=0;   
+      LINK_PRICES.pop[0];
+      priceChanges["LINK"] = LINK_PRICE_CHANGE;
     }
-
-    // if (linkPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1415,26 +1338,22 @@ async function monitorPrice() {
     const lptPrice = web3.utils.toWei(lptAmount.toString(), 'ether')
     console.log('LPT Price:', lptPrice / 100000000000000000000000000, ' USD')
     LPT_PRICES.push(lptPrice)
-    if (LPT_PRICES.length >= 10) {
-      if (LPT_PRICES[0] < LPT_PRICES[LPT_PRICES.length-1]){
-        console.log("LPT price went up %", ((LPT_PRICES[LPT_PRICES.length-1] - LPT_PRICES[0])/LPT_PRICES[0]) *100 );
+    if (LPT_PRICES.length >= 6) {
+      if (LPT_PRICES[0] < LPT_PRICES[LPT_PRICES.length - 1]) {
+        console.log("LPT price went up %", ((LPT_PRICES[LPT_PRICES.length - 1] - LPT_PRICES[0]) / LPT_PRICES[0]) * 100);
+        LPT_PRICE_CHANGE = ((LPT_PRICES[LPT_PRICES.length - 1] - LPT_PRICES[0]) / LPT_PRICES[0]) * 100;
       }
-      if (LPT_PRICES[0] > LPT_PRICES[LPT_PRICES.length-1]){
-        console.log("LPT price went down %", ((LPT_PRICES[0] - LPT_PRICES[LPT_PRICES.length-1])) *100 );
+      if (LPT_PRICES[0] > LPT_PRICES[LPT_PRICES.length - 1]) {
+        console.log("LPT price went down %", ((LPT_PRICES[0] - LPT_PRICES[LPT_PRICES.length - 1])) * 100);
+        LPT_PRICE_CHANGE = ((LPT_PRICES[0] - LPT_PRICES[LPT_PRICES.length - 1])) * -100;
       }
-      if (LPT_PRICES[0] == LPT_PRICES[LPT_PRICES.length-1]){
+      if (LPT_PRICES[0] == LPT_PRICES[LPT_PRICES.length - 1]) {
         console.log("LPT price didn't change");
+        LPT_PRICE_CHANGE = 0;
       }
-      LPT_PRICES.length=0;   
+      LPT_PRICES.pop[0];
+      priceChanges["LPT"] = LPT_PRICE_CHANGE;
     }
-
-    // if (lptPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1448,25 +1367,22 @@ async function monitorPrice() {
     const lunaPrice = web3.utils.toWei(lunaAmount.toString(), 'ether')
     console.log('LUNA Price:', lunaPrice / 100000000000000000000000000, ' USD')
     LUNA_PRICES.push(lunaPrice)
-    if (LUNA_PRICES.length >= 10) {
-      if (LUNA_PRICES[0] < LUNA_PRICES[LUNA_PRICES.length-1]){
-        console.log("LUNA price went up %", ((LUNA_PRICES[LUNA_PRICES.length-1] - LUNA_PRICES[0])/LUNA_PRICES[0]) *100 );
+    if (LUNA_PRICES.length >= 6) {
+      if (LUNA_PRICES[0] < LUNA_PRICES[LUNA_PRICES.length - 1]) {
+        console.log("LUNA price went up %", ((LUNA_PRICES[LUNA_PRICES.length - 1] - LUNA_PRICES[0]) / LUNA_PRICES[0]) * 100);
+        LUNA_PRICE_CHANGE = ((LUNA_PRICES[LUNA_PRICES.length - 1] - LUNA_PRICES[0]) / LUNA_PRICES[0]) * 100;
       }
-      if (LUNA_PRICES[0] > LUNA_PRICES[LUNA_PRICES.length-1]){
-        console.log("LUNA price went down %", ((LUNA_PRICES[0] - LUNA_PRICES[LUNA_PRICES.length-1])) *100 );
+      if (LUNA_PRICES[0] > LUNA_PRICES[LUNA_PRICES.length - 1]) {
+        console.log("LUNA price went down %", ((LUNA_PRICES[0] - LUNA_PRICES[LUNA_PRICES.length - 1])) * 100);
+        LUNA_PRICE_CHANGE = ((LUNA_PRICES[0] - LUNA_PRICES[LUNA_PRICES.length - 1])) * -100;
       }
-      if (LUNA_PRICES[0] == LUNA_PRICES[LUNA_PRICES.length-1]){
+      if (LUNA_PRICES[0] == LUNA_PRICES[LUNA_PRICES.length - 1]) {
         console.log("LUNA price didn't change");
+        LUNA_PRICE_CHANGE = 0;
       }
-      LUNA_PRICES.length=0;   
+      LUNA_PRICES.pop[0];
+      priceChanges["LUNA"] = LUNA_PRICE_CHANGE;
     }
-    // if (lunaPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1480,26 +1396,22 @@ async function monitorPrice() {
     const manaPrice = web3.utils.toWei(manaAmount.toString(), 'ether')
     console.log('MANA Price:', manaPrice / 100000000000000000000000000, ' USD')
     MANA_PRICES.push(manaPrice)
-    if (MANA_PRICES.length >= 10) {
-      if (MANA_PRICES[0] < MANA_PRICES[MANA_PRICES.length-1]){
-        console.log("MANA price went up %", ((MANA_PRICES[MANA_PRICES.length-1] - MANA_PRICES[0])/MANA_PRICES[0]) *100 );
+    if (MANA_PRICES.length >= 6) {
+      if (MANA_PRICES[0] < MANA_PRICES[MANA_PRICES.length - 1]) {
+        console.log("MANA price went up %", ((MANA_PRICES[MANA_PRICES.length - 1] - MANA_PRICES[0]) / MANA_PRICES[0]) * 100);
+        MANA_PRICE_CHANGE = ((MANA_PRICES[MANA_PRICES.length - 1] - MANA_PRICES[0]) / MANA_PRICES[0]) * 100;
       }
-      if (MANA_PRICES[0] > MANA_PRICES[MANA_PRICES.length-1]){
-        console.log("MANA price went down %", ((MANA_PRICES[0] - MANA_PRICES[MANA_PRICES.length-1])) *100 );
+      if (MANA_PRICES[0] > MANA_PRICES[MANA_PRICES.length - 1]) {
+        console.log("MANA price went down %", ((MANA_PRICES[0] - MANA_PRICES[MANA_PRICES.length - 1])) * 100);
+        MANA_PRICE_CHANGE = ((MANA_PRICES[0] - MANA_PRICES[MANA_PRICES.length - 1])) * -100;
       }
-      if (MANA_PRICES[0] == MANA_PRICES[MANA_PRICES.length-1]){
+      if (MANA_PRICES[0] == MANA_PRICES[MANA_PRICES.length - 1]) {
         console.log("MANA price didn't change");
+        MANA_PRICE_CHANGE = 0;
       }
-      MANA_PRICES.length=0;   
+      MANA_PRICES.pop[0];
+      priceChanges["MANA"] = MANA_PRICE_CHANGE;
     }
-
-    // if (manaPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1513,26 +1425,22 @@ async function monitorPrice() {
     const maticPrice = web3.utils.toWei(maticAmount.toString(), 'Ether')
     console.log('MATIC Price:', maticPrice / 100000000000000000000000000, ' USD')
     MATIC_PRICES.push(maticPrice)
-    if (MATIC_PRICES.length >= 10) {
-      if (MATIC_PRICES[0] < MATIC_PRICES[MATIC_PRICES.length-1]){
-        console.log("MATIC price went up %", ((MATIC_PRICES[MATIC_PRICES.length-1] - MATIC_PRICES[0])/MATIC_PRICES[0]) *100 );
+    if (MATIC_PRICES.length >= 6) {
+      if (MATIC_PRICES[0] < MATIC_PRICES[MATIC_PRICES.length - 1]) {
+        console.log("MATIC price went up %", ((MATIC_PRICES[MATIC_PRICES.length - 1] - MATIC_PRICES[0]) / MATIC_PRICES[0]) * 100);
+        MATIC_PRICE_CHANGE = ((MATIC_PRICES[MATIC_PRICES.length - 1] - MATIC_PRICES[0]) / MATIC_PRICES[0]) * 100;
       }
-      if (MATIC_PRICES[0] > MATIC_PRICES[MATIC_PRICES.length-1]){
-        console.log("MATIC price went down %", ((MATIC_PRICES[0] - MATIC_PRICES[MATIC_PRICES.length-1])) *100 );
+      if (MATIC_PRICES[0] > MATIC_PRICES[MATIC_PRICES.length - 1]) {
+        console.log("MATIC price went down %", ((MATIC_PRICES[0] - MATIC_PRICES[MATIC_PRICES.length - 1])) * 100);
+        MATIC_PRICE_CHANGE = ((MATIC_PRICES[0] - MATIC_PRICES[MATIC_PRICES.length - 1])) * -100;
       }
-      if (MATIC_PRICES[0] == MATIC_PRICES[MATIC_PRICES.length-1]){
+      if (MATIC_PRICES[0] == MATIC_PRICES[MATIC_PRICES.length - 1]) {
         console.log("MATIC price didn't change");
+        MATIC_PRICE_CHANGE = 0;
       }
-      MATIC_PRICES.length=0;   
+      MATIC_PRICES.pop[0];
+      priceChanges["MATIC"] = MATIC_PRICE_CHANGE;
     }
-
-    // if (maticPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1546,26 +1454,22 @@ async function monitorPrice() {
     const miotaPrice = web3.utils.toWei(miotaAmount.toString(), 'Ether')
     console.log('MIOTA Price:', miotaPrice / 100000000000000000000000000, ' USD')
     MIOTA_PRICES.push(miotaPrice)
-    if (MIOTA_PRICES.length >= 10) {
-      if (MIOTA_PRICES[0] < MIOTA_PRICES[MIOTA_PRICES.length-1]){
-        console.log("MIOTA price went up %", ((MIOTA_PRICES[MIOTA_PRICES.length-1] - MIOTA_PRICES[0])/MIOTA_PRICES[0]) *100 );
+    if (MIOTA_PRICES.length >= 6) {
+      if (MIOTA_PRICES[0] < MIOTA_PRICES[MIOTA_PRICES.length - 1]) {
+        console.log("MIOTA price went up %", ((MIOTA_PRICES[MIOTA_PRICES.length - 1] - MIOTA_PRICES[0]) / MIOTA_PRICES[0]) * 100);
+        MIOTA_PRICE_CHANGE = ((MIOTA_PRICES[MIOTA_PRICES.length - 1] - MIOTA_PRICES[0]) / MIOTA_PRICES[0]) * 100;
       }
-      if (MIOTA_PRICES[0] > MIOTA_PRICES[MIOTA_PRICES.length-1]){
-        console.log("MIOTA price went down %", ((MIOTA_PRICES[0] - MIOTA_PRICES[MIOTA_PRICES.length-1])) *100 );
+      if (MIOTA_PRICES[0] > MIOTA_PRICES[MIOTA_PRICES.length - 1]) {
+        console.log("MIOTA price went down %", ((MIOTA_PRICES[0] - MIOTA_PRICES[MIOTA_PRICES.length - 1])) * 100);
+        MIOTA_PRICE_CHANGE = ((MIOTA_PRICES[0] - MIOTA_PRICES[MIOTA_PRICES.length - 1])) * -100;
       }
-      if (MIOTA_PRICES[0] == MIOTA_PRICES[MIOTA_PRICES.length-1]){
+      if (MIOTA_PRICES[0] == MIOTA_PRICES[MIOTA_PRICES.length - 1]) {
         console.log("MIOTA price didn't change");
+        MIOTA_PRICE_CHANGE = 0;
       }
-      MIOTA_PRICES.length=0;   
+      MIOTA_PRICES.pop[0];
+      priceChanges["MIOTA"] = MIOTA_PRICE_CHANGE;
     }
-
-    // if (miotaPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1579,26 +1483,22 @@ async function monitorPrice() {
     const mkrPrice = web3.utils.toWei(mkrAmount.toString(), 'Ether')
     console.log('MKR Price:', mkrPrice / 100000000000000000000000000, ' USD')
     MKR_PRICES.push(mkrPrice)
-    if (MKR_PRICES.length >= 10) {
-      if (MKR_PRICES[0] < MKR_PRICES[MKR_PRICES.length-1]){
-        console.log("MKR price went up %", ((MKR_PRICES[MKR_PRICES.length-1] - MKR_PRICES[0])/MKR_PRICES[0]) *100 );
+    if (MKR_PRICES.length >= 6) {
+      if (MKR_PRICES[0] < MKR_PRICES[MKR_PRICES.length - 1]) {
+        console.log("MKR price went up %", ((MKR_PRICES[MKR_PRICES.length - 1] - MKR_PRICES[0]) / MKR_PRICES[0]) * 100);
+        MKR_PRICE_CHANGE = ((MKR_PRICES[MKR_PRICES.length - 1] - MKR_PRICES[0]) / MKR_PRICES[0]) * 100;
       }
-      if (MKR_PRICES[0] > MKR_PRICES[MKR_PRICES.length-1]){
-        console.log("MKR price went down %", ((MKR_PRICES[0] - MKR_PRICES[MKR_PRICES.length-1])) *100 );
+      if (MKR_PRICES[0] > MKR_PRICES[MKR_PRICES.length - 1]) {
+        console.log("MKR price went down %", ((MKR_PRICES[0] - MKR_PRICES[MKR_PRICES.length - 1])) * 100);
+        MKR_PRICE_CHANGE = ((MKR_PRICES[0] - MKR_PRICES[MKR_PRICES.length - 1])) * -100;
       }
-      if (MKR_PRICES[0] == MKR_PRICES[MKR_PRICES.length-1]){
+      if (MKR_PRICES[0] == MKR_PRICES[MKR_PRICES.length - 1]) {
         console.log("MKR price didn't change");
+        MKR_PRICE_CHANGE = 0;
       }
-      MKR_PRICES.length=0;   
+      MKR_PRICES.pop[0];
+      priceChanges["MKR"] = MKR_PRICE_CHANGE;
     }
-
-    // if (mkrPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1612,26 +1512,22 @@ async function monitorPrice() {
     const neoPrice = web3.utils.toWei(neoAmount.toString(), 'Ether')
     console.log('NEO Price:', neoPrice / 100000000000000000000000000, ' USD')
     NEO_PRICES.push(neoPrice)
-    if (NEO_PRICES.length >= 10) {
-      if (NEO_PRICES[0] < NEO_PRICES[NEO_PRICES.length-1]){
-        console.log("NEO price went up %", ((NEO_PRICES[NEO_PRICES.length-1] - NEO_PRICES[0])/NEO_PRICES[0]) *100 );
+    if (NEO_PRICES.length >= 6) {
+      if (NEO_PRICES[0] < NEO_PRICES[NEO_PRICES.length - 1]) {
+        console.log("NEO price went up %", ((NEO_PRICES[NEO_PRICES.length - 1] - NEO_PRICES[0]) / NEO_PRICES[0]) * 100);
+        NEO_PRICE_CHANGE = ((NEO_PRICES[NEO_PRICES.length - 1] - NEO_PRICES[0]) / NEO_PRICES[0]) * 100;
       }
-      if (NEO_PRICES[0] > NEO_PRICES[NEO_PRICES.length-1]){
-        console.log("NEO price went down %", ((NEO_PRICES[0] - NEO_PRICES[NEO_PRICES.length-1])) *100 );
+      if (NEO_PRICES[0] > NEO_PRICES[NEO_PRICES.length - 1]) {
+        console.log("NEO price went down %", ((NEO_PRICES[0] - NEO_PRICES[NEO_PRICES.length - 1])) * 100);
+        NEO_PRICE_CHANGE = ((NEO_PRICES[0] - NEO_PRICES[NEO_PRICES.length - 1])) * -100;
       }
-      if (NEO_PRICES[0] == NEO_PRICES[NEO_PRICES.length-1]){
+      if (NEO_PRICES[0] == NEO_PRICES[NEO_PRICES.length - 1]) {
         console.log("NEO price didn't change");
+        NEO_PRICE_CHANGE = 0;
       }
-      NEO_PRICES.length=0;   
+      NEO_PRICES.pop[0];
+      priceChanges["NEO"] = NEO_PRICE_CHANGE;
     }
-
-    // if (neoPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1645,26 +1541,22 @@ async function monitorPrice() {
     const nexoPrice = web3.utils.toWei(nexoAmount.toString(), 'Ether')
     console.log('NEXO Price:', nexoPrice / 100000000000000000000000000, ' USD')
     NEXO_PRICES.push(nexoPrice)
-    if (NEXO_PRICES.length >= 10) {
-      if (NEXO_PRICES[0] < NEXO_PRICES[NEXO_PRICES.length-1]){
-        console.log("NEXO price went up %", ((NEXO_PRICES[NEXO_PRICES.length-1] - NEXO_PRICES[0])/NEXO_PRICES[0]) *100 );
+    if (NEXO_PRICES.length >= 6) {
+      if (NEXO_PRICES[0] < NEXO_PRICES[NEXO_PRICES.length - 1]) {
+        console.log("NEXO price went up %", ((NEXO_PRICES[NEXO_PRICES.length - 1] - NEXO_PRICES[0]) / NEXO_PRICES[0]) * 100);
+        NEXO_PRICE_CHANGE = ((NEXO_PRICES[NEXO_PRICES.length - 1] - NEXO_PRICES[0]) / NEXO_PRICES[0]) * 100;
       }
-      if (NEXO_PRICES[0] > NEXO_PRICES[NEXO_PRICES.length-1]){
-        console.log("NEXO price went down %", ((NEXO_PRICES[0] - NEXO_PRICES[NEXO_PRICES.length-1])) *100 );
+      if (NEXO_PRICES[0] > NEXO_PRICES[NEXO_PRICES.length - 1]) {
+        console.log("NEXO price went down %", ((NEXO_PRICES[0] - NEXO_PRICES[NEXO_PRICES.length - 1])) * 100);
+        NEXO_PRICE_CHANGE = ((NEXO_PRICES[0] - NEXO_PRICES[NEXO_PRICES.length - 1])) * -100;
       }
-      if (NEXO_PRICES[0] == NEXO_PRICES[NEXO_PRICES.length-1]){
+      if (NEXO_PRICES[0] == NEXO_PRICES[NEXO_PRICES.length - 1]) {
         console.log("NEXO price didn't change");
+        NEXO_PRICE_CHANGE = 0;
       }
-      NEXO_PRICES.length=0;   
+      NEXO_PRICES.pop[0];
+      priceChanges["NEXO"] = NEXO_PRICE_CHANGE;
     }
-
-    // if (nexoPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1678,26 +1570,22 @@ async function monitorPrice() {
     const omgPrice = web3.utils.toWei(omgAmount.toString(), 'Ether')
     console.log('OMG Price:', omgPrice / 100000000000000000000000000, ' USD')
     OMG_PRICES.push(omgPrice)
-    if (OMG_PRICES.length >= 10) {
-      if (OMG_PRICES[0] < OMG_PRICES[OMG_PRICES.length-1]){
-        console.log("OMG price went up %", ((OMG_PRICES[OMG_PRICES.length-1] - OMG_PRICES[0])/OMG_PRICES[0]) *100 );
+    if (OMG_PRICES.length >= 6) {
+      if (OMG_PRICES[0] < OMG_PRICES[OMG_PRICES.length - 1]) {
+        console.log("OMG price went up %", ((OMG_PRICES[OMG_PRICES.length - 1] - OMG_PRICES[0]) / OMG_PRICES[0]) * 100);
+        OMG_PRICE_CHANGE = ((OMG_PRICES[OMG_PRICES.length - 1] - OMG_PRICES[0]) / OMG_PRICES[0]) * 100;
       }
-      if (OMG_PRICES[0] > OMG_PRICES[OMG_PRICES.length-1]){
-        console.log("OMG price went down %", ((OMG_PRICES[0] - OMG_PRICES[OMG_PRICES.length-1])) *100 );
+      if (OMG_PRICES[0] > OMG_PRICES[OMG_PRICES.length - 1]) {
+        console.log("OMG price went down %", ((OMG_PRICES[0] - OMG_PRICES[OMG_PRICES.length - 1])) * 100);
+        OMG_PRICE_CHANGE = ((OMG_PRICES[0] - OMG_PRICES[OMG_PRICES.length - 1])) * -100;
       }
-      if (OMG_PRICES[0] == OMG_PRICES[OMG_PRICES.length-1]){
+      if (OMG_PRICES[0] == OMG_PRICES[OMG_PRICES.length - 1]) {
         console.log("OMG price didn't change");
+        OMG_PRICE_CHANGE = 0;
       }
-      OMG_PRICES.length=0;   
+      OMG_PRICES.pop[0];
+      priceChanges["OMG"] = OMG_PRICE_CHANGE;
     }
-
-    // if (omgPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1711,26 +1599,22 @@ async function monitorPrice() {
     const omrPrice = web3.utils.toWei(omrAmount.toString(), 'Ether')
     console.log('OMR Price:', omrPrice / 100000000000000000000000000, ' USD')
     OMR_PRICES.push(omrPrice)
-    if (OMR_PRICES.length >= 10) {
-      if (OMR_PRICES[0] < OMR_PRICES[OMR_PRICES.length-1]){
-        console.log("OMR price went up %", ((OMR_PRICES[OMR_PRICES.length-1] - OMR_PRICES[0])/OMR_PRICES[0]) *100 );
+    if (OMR_PRICES.length >= 6) {
+      if (OMR_PRICES[0] < OMR_PRICES[OMR_PRICES.length - 1]) {
+        console.log("OMR price went up %", ((OMR_PRICES[OMR_PRICES.length - 1] - OMR_PRICES[0]) / OMR_PRICES[0]) * 100);
+        OMR_PRICE_CHANGE = ((OMR_PRICES[OMR_PRICES.length - 1] - OMR_PRICES[0]) / OMR_PRICES[0]) * 100;
       }
-      if (OMR_PRICES[0] > OMR_PRICES[OMR_PRICES.length-1]){
-        console.log("OMR price went down %", ((OMR_PRICES[0] - OMR_PRICES[OMR_PRICES.length-1])) *100 );
+      if (OMR_PRICES[0] > OMR_PRICES[OMR_PRICES.length - 1]) {
+        console.log("OMR price went down %", ((OMR_PRICES[0] - OMR_PRICES[OMR_PRICES.length - 1])) * 100);
+        OMR_PRICE_CHANGE = ((OMR_PRICES[0] - OMR_PRICES[OMR_PRICES.length - 1])) * -100;
       }
-      if (OMR_PRICES[0] == OMR_PRICES[OMR_PRICES.length-1]){
+      if (OMR_PRICES[0] == OMR_PRICES[OMR_PRICES.length - 1]) {
         console.log("OMR price didn't change");
+        OMR_PRICE_CHANGE = 0;
       }
-      OMR_PRICES.length=0;   
+      OMR_PRICES.pop[0];
+      priceChanges["OMR"] = OMR_PRICE_CHANGE;
     }
-
-    // if (omrPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1744,26 +1628,22 @@ async function monitorPrice() {
     const paxgPrice = web3.utils.toWei(paxgAmount.toString(), 'Ether')
     console.log('PAXG Price:', paxgPrice / 100000000000000000000000000, ' USD')
     PAXG_PRICES.push(paxgPrice)
-    if (PAXG_PRICES.length >= 10) {
-      if (PAXG_PRICES[0] < PAXG_PRICES[PAXG_PRICES.length-1]){
-        console.log("PAXG price went up %", ((PAXG_PRICES[PAXG_PRICES.length-1] - PAXG_PRICES[0])/PAXG_PRICES[0]) *100 );
+    if (PAXG_PRICES.length >= 6) {
+      if (PAXG_PRICES[0] < PAXG_PRICES[PAXG_PRICES.length - 1]) {
+        console.log("PAXG price went up %", ((PAXG_PRICES[PAXG_PRICES.length - 1] - PAXG_PRICES[0]) / PAXG_PRICES[0]) * 100);
+        PAXG_PRICE_CHANGE = ((PAXG_PRICES[PAXG_PRICES.length - 1] - PAXG_PRICES[0]) / PAXG_PRICES[0]) * 100;
       }
-      if (PAXG_PRICES[0] > PAXG_PRICES[PAXG_PRICES.length-1]){
-        console.log("PAXG price went down %", ((PAXG_PRICES[0] - PAXG_PRICES[PAXG_PRICES.length-1])) *100 );
+      if (PAXG_PRICES[0] > PAXG_PRICES[PAXG_PRICES.length - 1]) {
+        console.log("PAXG price went down %", ((PAXG_PRICES[0] - PAXG_PRICES[PAXG_PRICES.length - 1])) * 100);
+        PAXG_PRICE_CHANGE = ((PAXG_PRICES[0] - PAXG_PRICES[PAXG_PRICES.length - 1])) * -100;
       }
-      if (PAXG_PRICES[0] == PAXG_PRICES[PAXG_PRICES.length-1]){
+      if (PAXG_PRICES[0] == PAXG_PRICES[PAXG_PRICES.length - 1]) {
         console.log("PAXG price didn't change");
+        PAXG_PRICE_CHANGE = 0;
       }
-      PAXG_PRICES.length=0;   
+      PAXG_PRICES.pop[0];
+      priceChanges["PAXG"] = PAXG_PRICE_CHANGE;
     }
-
-    // if (paxgPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1777,26 +1657,22 @@ async function monitorPrice() {
     const repPrice = web3.utils.toWei(repAmount.toString(), 'Ether')
     console.log('REP Price:', repPrice / 100000000000000000000000000, ' USD')
     REP_PRICES.push(repPrice)
-    if (REP_PRICES.length >= 10) {
-      if (REP_PRICES[0] < REP_PRICES[REP_PRICES.length-1]){
-        console.log("REP price went up %", ((REP_PRICES[REP_PRICES.length-1] - REP_PRICES[0])/REP_PRICES[0]) *100 );
+    if (REP_PRICES.length >= 6) {
+      if (REP_PRICES[0] < REP_PRICES[REP_PRICES.length - 1]) {
+        console.log("REP price went up %", ((REP_PRICES[REP_PRICES.length - 1] - REP_PRICES[0]) / REP_PRICES[0]) * 100);
+        REP_PRICE_CHANGE = ((REP_PRICES[REP_PRICES.length - 1] - REP_PRICES[0]) / REP_PRICES[0]) * 100;
       }
-      if (REP_PRICES[0] > REP_PRICES[REP_PRICES.length-1]){
-        console.log("REP price went down %", ((REP_PRICES[0] - REP_PRICES[REP_PRICES.length-1])) *100 );
+      if (REP_PRICES[0] > REP_PRICES[REP_PRICES.length - 1]) {
+        console.log("REP price went down %", ((REP_PRICES[0] - REP_PRICES[REP_PRICES.length - 1])) * 100);
+        REP_PRICE_CHANGE = ((REP_PRICES[0] - REP_PRICES[REP_PRICES.length - 1])) * -100;
       }
-      if (REP_PRICES[0] == REP_PRICES[REP_PRICES.length-1]){
+      if (REP_PRICES[0] == REP_PRICES[REP_PRICES.length - 1]) {
         console.log("REP price didn't change");
+        REP_PRICE_CHANGE = 0;
       }
-      REP_PRICES.length=0;   
+      REP_PRICES.pop[0];
+      priceChanges["REP"] = REP_PRICE_CHANGE;
     }
-
-    // if (repPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1810,26 +1686,22 @@ async function monitorPrice() {
     const sarPrice = web3.utils.toWei(sarAmount.toString(), 'Ether')
     console.log('SAR Price:', sarPrice / 100000000000000000000000000, ' USD')
     SAR_PRICES.push(sarPrice)
-    if (SAR_PRICES.length >= 10) {
-      if (SAR_PRICES[0] < SAR_PRICES[SAR_PRICES.length-1]){
-        console.log("SAR price went up %", ((SAR_PRICES[SAR_PRICES.length-1] - SAR_PRICES[0])/SAR_PRICES[0]) *100 );
+    if (SAR_PRICES.length >= 6) {
+      if (SAR_PRICES[0] < SAR_PRICES[SAR_PRICES.length - 1]) {
+        console.log("SAR price went up %", ((SAR_PRICES[SAR_PRICES.length - 1] - SAR_PRICES[0]) / SAR_PRICES[0]) * 100);
+        SAR_PRICE_CHANGE = ((SAR_PRICES[SAR_PRICES.length - 1] - SAR_PRICES[0]) / SAR_PRICES[0]) * 100;
       }
-      if (SAR_PRICES[0] > SAR_PRICES[SAR_PRICES.length-1]){
-        console.log("SAR price went down %", ((SAR_PRICES[0] - SAR_PRICES[SAR_PRICES.length-1])) *100 );
+      if (SAR_PRICES[0] > SAR_PRICES[SAR_PRICES.length - 1]) {
+        console.log("SAR price went down %", ((SAR_PRICES[0] - SAR_PRICES[SAR_PRICES.length - 1])) * 100);
+        SAR_PRICE_CHANGE = ((SAR_PRICES[0] - SAR_PRICES[SAR_PRICES.length - 1])) * -100;
       }
-      if (SAR_PRICES[0] == SAR_PRICES[SAR_PRICES.length-1]){
+      if (SAR_PRICES[0] == SAR_PRICES[SAR_PRICES.length - 1]) {
         console.log("SAR price didn't change");
+        SAR_PRICE_CHANGE = 0;
       }
-      SAR_PRICES.length=0;   
+      SAR_PRICES.pop[0];
+      priceChanges["SAR"] = SAR_PRICE_CHANGE;
     }
-
-    // if (sarPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1843,26 +1715,22 @@ async function monitorPrice() {
     const snxPrice = web3.utils.toWei(snxAmount.toString(), 'Ether')
     console.log('SNX Price:', snxPrice / 100000000000000000000000000, ' USD')
     SNX_PRICES.push(snxPrice)
-    if (SNX_PRICES.length >= 10) {
-      if (SNX_PRICES[0] < SNX_PRICES[SNX_PRICES.length-1]){
-        console.log("SNX price went up %", ((SNX_PRICES[SNX_PRICES.length-1] - SNX_PRICES[0])/SNX_PRICES[0]) *100 );
+    if (SNX_PRICES.length >= 6) {
+      if (SNX_PRICES[0] < SNX_PRICES[SNX_PRICES.length - 1]) {
+        console.log("SNX price went up %", ((SNX_PRICES[SNX_PRICES.length - 1] - SNX_PRICES[0]) / SNX_PRICES[0]) * 100);
+        SNX_PRICE_CHANGE = ((SNX_PRICES[SNX_PRICES.length - 1] - SNX_PRICES[0]) / SNX_PRICES[0]) * 100;
       }
-      if (SNX_PRICES[0] > SNX_PRICES[SNX_PRICES.length-1]){
-        console.log("SNX price went down %", ((SNX_PRICES[0] - SNX_PRICES[SNX_PRICES.length-1])) *100 );
+      if (SNX_PRICES[0] > SNX_PRICES[SNX_PRICES.length - 1]) {
+        console.log("SNX price went down %", ((SNX_PRICES[0] - SNX_PRICES[SNX_PRICES.length - 1])) * 100);
+        SNX_PRICE_CHANGE = ((SNX_PRICES[0] - SNX_PRICES[SNX_PRICES.length - 1])) * -100;
       }
-      if (SNX_PRICES[0] == SNX_PRICES[SNX_PRICES.length-1]){
+      if (SNX_PRICES[0] == SNX_PRICES[SNX_PRICES.length - 1]) {
         console.log("SNX price didn't change");
+        SNX_PRICE_CHANGE = 0;
       }
-      SNX_PRICES.length=0;   
+      SNX_PRICES.pop[0];
+      priceChanges["SNX"] = SNX_PRICE_CHANGE;
     }
-
-    // if (snxPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1876,26 +1744,22 @@ async function monitorPrice() {
     const solPrice = web3.utils.toWei(solAmount.toString(), 'Ether')
     console.log('SOL Price:', solPrice / 100000000000000000000000000, ' USD')
     SOL_PRICES.push(solPrice)
-    if (SOL_PRICES.length >= 10) {
-      if (SOL_PRICES[0] < SOL_PRICES[SOL_PRICES.length-1]){
-        console.log("SOL price went up %", ((SOL_PRICES[SOL_PRICES.length-1] - SOL_PRICES[0])/SOL_PRICES[0]) *100 );
+    if (SOL_PRICES.length >= 6) {
+      if (SOL_PRICES[0] < SOL_PRICES[SOL_PRICES.length - 1]) {
+        console.log("SOL price went up %", ((SOL_PRICES[SOL_PRICES.length - 1] - SOL_PRICES[0]) / SOL_PRICES[0]) * 100);
+        SOL_PRICE_CHANGE = ((SOL_PRICES[SOL_PRICES.length - 1] - SOL_PRICES[0]) / SOL_PRICES[0]) * 100;
       }
-      if (SOL_PRICES[0] > SOL_PRICES[SOL_PRICES.length-1]){
-        console.log("SOL price went down %", ((SOL_PRICES[0] - SOL_PRICES[SOL_PRICES.length-1])) *100 );
+      if (SOL_PRICES[0] > SOL_PRICES[SOL_PRICES.length - 1]) {
+        console.log("SOL price went down %", ((SOL_PRICES[0] - SOL_PRICES[SOL_PRICES.length - 1])) * 100);
+        SOL_PRICE_CHANGE = ((SOL_PRICES[0] - SOL_PRICES[SOL_PRICES.length - 1])) * -100;
       }
-      if (SOL_PRICES[0] == SOL_PRICES[SOL_PRICES.length-1]){
+      if (SOL_PRICES[0] == SOL_PRICES[SOL_PRICES.length - 1]) {
         console.log("SOL price didn't change");
+        SOL_PRICE_CHANGE = 0;
       }
-      SOL_PRICES.length=0;   
+      SOL_PRICES.pop[0];
+      priceChanges["SOL"] = SOL_PRICE_CHANGE;
     }
-
-    // if (solPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')      
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1909,26 +1773,22 @@ async function monitorPrice() {
     const sushiPrice = web3.utils.toWei(sushiAmount.toString(), 'Ether')
     console.log('SUSHI Price:', sushiPrice / 100000000000000000000000000, ' USD')
     SUSHI_PRICES.push(sushiPrice)
-    if (SUSHI_PRICES.length >= 10) {
-      if (SUSHI_PRICES[0] < SUSHI_PRICES[SUSHI_PRICES.length-1]){
-        console.log("SUSHI price went up %", ((SUSHI_PRICES[SUSHI_PRICES.length-1] - SUSHI_PRICES[0])/SUSHI_PRICES[0]) *100 );
+    if (SUSHI_PRICES.length >= 6) {
+      if (SUSHI_PRICES[0] < SUSHI_PRICES[SUSHI_PRICES.length - 1]) {
+        console.log("SUSHI price went up %", ((SUSHI_PRICES[SUSHI_PRICES.length - 1] - SUSHI_PRICES[0]) / SUSHI_PRICES[0]) * 100);
+        SUSHI_PRICE_CHANGE = ((SUSHI_PRICES[SUSHI_PRICES.length - 1] - SUSHI_PRICES[0]) / SUSHI_PRICES[0]) * 100;
       }
-      if (SUSHI_PRICES[0] > SUSHI_PRICES[SUSHI_PRICES.length-1]){
-        console.log("SUSHI price went down %", ((SUSHI_PRICES[0] - SUSHI_PRICES[SUSHI_PRICES.length-1])) *100 );
+      if (SUSHI_PRICES[0] > SUSHI_PRICES[SUSHI_PRICES.length - 1]) {
+        console.log("SUSHI price went down %", ((SUSHI_PRICES[0] - SUSHI_PRICES[SUSHI_PRICES.length - 1])) * 100);
+        SUSHI_PRICE_CHANGE = ((SUSHI_PRICES[0] - SUSHI_PRICES[SUSHI_PRICES.length - 1])) * -100;
       }
-      if (SUSHI_PRICES[0] == SUSHI_PRICES[SUSHI_PRICES.length-1]){
+      if (SUSHI_PRICES[0] == SUSHI_PRICES[SUSHI_PRICES.length - 1]) {
         console.log("SUSHI price didn't change");
+        SUSHI_PRICE_CHANGE = 0;
       }
-      SUSHI_PRICES.length=0;   
+      SUSHI_PRICES.pop[0];
+      priceChanges["SUSHI"] = SUSHI_PRICE_CHANGE;
     }
-
-    // if (sushiPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1942,26 +1802,22 @@ async function monitorPrice() {
     const thetaPrice = web3.utils.toWei(thetaAmount.toString(), 'Ether')
     console.log('THETA Price:', thetaPrice / 100000000000000000000000000, ' USD')
     THETA_PRICES.push(thetaPrice)
-    if (THETA_PRICES.length >= 10) {
-      if (THETA_PRICES[0] < THETA_PRICES[THETA_PRICES.length-1]){
-        console.log("THETA price went up %", ((THETA_PRICES[THETA_PRICES.length-1] - THETA_PRICES[0])/THETA_PRICES[0]) *100 );
+    if (THETA_PRICES.length >= 6) {
+      if (THETA_PRICES[0] < THETA_PRICES[THETA_PRICES.length - 1]) {
+        console.log("THETA price went up %", ((THETA_PRICES[THETA_PRICES.length - 1] - THETA_PRICES[0]) / THETA_PRICES[0]) * 100);
+        THETA_PRICE_CHANGE = ((THETA_PRICES[THETA_PRICES.length - 1] - THETA_PRICES[0]) / THETA_PRICES[0]) * 100;
       }
-      if (THETA_PRICES[0] > THETA_PRICES[THETA_PRICES.length-1]){
-        console.log("THETA price went down %", ((THETA_PRICES[0] - THETA_PRICES[THETA_PRICES.length-1])) *100 );
+      if (THETA_PRICES[0] > THETA_PRICES[THETA_PRICES.length - 1]) {
+        console.log("THETA price went down %", ((THETA_PRICES[0] - THETA_PRICES[THETA_PRICES.length - 1])) * 100);
+        THETA_PRICE_CHANGE = ((THETA_PRICES[0] - THETA_PRICES[THETA_PRICES.length - 1])) * -100;
       }
-      if (THETA_PRICES[0] == THETA_PRICES[THETA_PRICES.length-1]){
+      if (THETA_PRICES[0] == THETA_PRICES[THETA_PRICES.length - 1]) {
         console.log("THETA price didn't change");
+        THETA_PRICE_CHANGE = 0;
       }
-      THETA_PRICES.length=0;   
+      THETA_PRICES.pop[0];
+      priceChanges["THETA"] = THETA_PRICE_CHANGE;
     }
-
-    // if (thetaPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -1975,26 +1831,22 @@ async function monitorPrice() {
     const trxPrice = web3.utils.toWei(trxAmount.toString(), 'Ether')
     console.log('TRX Price:', trxPrice / 100000000000000000000000000, ' USD')
     TRX_PRICES.push(trxPrice)
-    if (TRX_PRICES.length >= 10) {
-      if (TRX_PRICES[0] < TRX_PRICES[TRX_PRICES.length-1]){
-        console.log("TRX price went up %", ((TRX_PRICES[TRX_PRICES.length-1] - TRX_PRICES[0])/TRX_PRICES[0]) *100 );
+    if (TRX_PRICES.length >= 6) {
+      if (TRX_PRICES[0] < TRX_PRICES[TRX_PRICES.length - 1]) {
+        console.log("TRX price went up %", ((TRX_PRICES[TRX_PRICES.length - 1] - TRX_PRICES[0]) / TRX_PRICES[0]) * 100);
+        TRX_PRICE_CHANGE = ((TRX_PRICES[TRX_PRICES.length - 1] - TRX_PRICES[0]) / TRX_PRICES[0]) * 100;
       }
-      if (TRX_PRICES[0] > TRX_PRICES[TRX_PRICES.length-1]){
-        console.log("TRX price went down %", ((TRX_PRICES[0] - TRX_PRICES[TRX_PRICES.length-1])) *100 );
+      if (TRX_PRICES[0] > TRX_PRICES[TRX_PRICES.length - 1]) {
+        console.log("TRX price went down %", ((TRX_PRICES[0] - TRX_PRICES[TRX_PRICES.length - 1])) * 100);
+        TRX_PRICE_CHANGE = ((TRX_PRICES[0] - TRX_PRICES[TRX_PRICES.length - 1])) * -100;
       }
-      if (TRX_PRICES[0] == TRX_PRICES[TRX_PRICES.length-1]){
+      if (TRX_PRICES[0] == TRX_PRICES[TRX_PRICES.length - 1]) {
         console.log("TRX price didn't change");
+        TRX_PRICE_CHANGE = 0;
       }
-      TRX_PRICES.length=0;   
+      TRX_PRICES.pop[0];
+      priceChanges["TRX"] = TRX_PRICE_CHANGE;
     }
-
-    // if (trxPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2008,26 +1860,22 @@ async function monitorPrice() {
     const umaPrice = web3.utils.toWei(umaAmount.toString(), 'Ether')
     console.log('UMA Price:', umaPrice / 100000000000000000000000000, ' USD')
     UMA_PRICES.push(umaPrice)
-    if (UMA_PRICES.length >= 10) {
-      if (UMA_PRICES[0] < UMA_PRICES[UMA_PRICES.length-1]){
-        console.log("UMA price went up %", ((UMA_PRICES[UMA_PRICES.length-1] - UMA_PRICES[0])/UMA_PRICES[0]) *100 );
+    if (UMA_PRICES.length >= 6) {
+      if (UMA_PRICES[0] < UMA_PRICES[UMA_PRICES.length - 1]) {
+        console.log("UMA price went up %", ((UMA_PRICES[UMA_PRICES.length - 1] - UMA_PRICES[0]) / UMA_PRICES[0]) * 100);
+        UMA_PRICE_CHANGE = ((UMA_PRICES[UMA_PRICES.length - 1] - UMA_PRICES[0]) / UMA_PRICES[0]) * 100;
       }
-      if (UMA_PRICES[0] > UMA_PRICES[UMA_PRICES.length-1]){
-        console.log("UMA price went down %", ((UMA_PRICES[0] - UMA_PRICES[UMA_PRICES.length-1])) *100 );
+      if (UMA_PRICES[0] > UMA_PRICES[UMA_PRICES.length - 1]) {
+        console.log("UMA price went down %", ((UMA_PRICES[0] - UMA_PRICES[UMA_PRICES.length - 1])) * 100);
+        UMA_PRICE_CHANGE = ((UMA_PRICES[0] - UMA_PRICES[UMA_PRICES.length - 1])) * -100;
       }
-      if (UMA_PRICES[0] == UMA_PRICES[UMA_PRICES.length-1]){
+      if (UMA_PRICES[0] == UMA_PRICES[UMA_PRICES.length - 1]) {
         console.log("UMA price didn't change");
+        UMA_PRICE_CHANGE = 0;
       }
-      UMA_PRICES.length=0;   
+      UMA_PRICES.pop[0];
+      priceChanges["UMA"] = UMA_PRICE_CHANGE;
     }
-
-    // if (umaPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2041,26 +1889,22 @@ async function monitorPrice() {
     const uniPrice = web3.utils.toWei(uniAmount.toString(), 'Ether')
     console.log('UNI Price:', uniPrice / 100000000000000000000000000, ' USD')
     UNI_PRICES.push(uniPrice)
-    if (UNI_PRICES.length >= 10) {
-      if (UNI_PRICES[0] < UNI_PRICES[UNI_PRICES.length-1]){
-        console.log("UNI price went up %", ((UNI_PRICES[UNI_PRICES.length-1] - UNI_PRICES[0])/UNI_PRICES[0]) *100 );
+    if (UNI_PRICES.length >= 6) {
+      if (UNI_PRICES[0] < UNI_PRICES[UNI_PRICES.length - 1]) {
+        console.log("UNI price went up %", ((UNI_PRICES[UNI_PRICES.length - 1] - UNI_PRICES[0]) / UNI_PRICES[0]) * 100);
+        UNI_PRICE_CHANGE = ((UNI_PRICES[UNI_PRICES.length - 1] - UNI_PRICES[0]) / UNI_PRICES[0]) * 100;
       }
-      if (UNI_PRICES[0] > UNI_PRICES[UNI_PRICES.length-1]){
-        console.log("UNI price went down %", ((UNI_PRICES[0] - UNI_PRICES[UNI_PRICES.length-1])) *100 );
+      if (UNI_PRICES[0] > UNI_PRICES[UNI_PRICES.length - 1]) {
+        console.log("UNI price went down %", ((UNI_PRICES[0] - UNI_PRICES[UNI_PRICES.length - 1])) * 100);
+        UNI_PRICE_CHANGE = ((UNI_PRICES[0] - UNI_PRICES[UNI_PRICES.length - 1])) * -100;
       }
-      if (UNI_PRICES[0] == UNI_PRICES[UNI_PRICES.length-1]){
+      if (UNI_PRICES[0] == UNI_PRICES[UNI_PRICES.length - 1]) {
         console.log("UNI price didn't change");
+        UNI_PRICE_CHANGE = 0;
       }
-      UNI_PRICES.length=0;   
+      UNI_PRICES.pop[0];
+      priceChanges["UNI"] = UNI_PRICE_CHANGE;
     }
-
-    // if (uniPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2074,26 +1918,22 @@ async function monitorPrice() {
     const usdcPrice = web3.utils.toWei(usdcAmount.toString(), 'Ether')
     console.log('USDC Price:', usdcPrice / 100000000000000000000000000, ' USD')
     USDC_PRICES.push(usdcPrice)
-    if (USDC_PRICES.length >= 10) {
-      if (USDC_PRICES[0] < USDC_PRICES[USDC_PRICES.length-1]){
-        console.log("USDC price went up %", ((USDC_PRICES[USDC_PRICES.length-1] - USDC_PRICES[0])/USDC_PRICES[0]) *100 );
+    if (USDC_PRICES.length >= 6) {
+      if (USDC_PRICES[0] < USDC_PRICES[USDC_PRICES.length - 1]) {
+        console.log("USDC price went up %", ((USDC_PRICES[USDC_PRICES.length - 1] - USDC_PRICES[0]) / USDC_PRICES[0]) * 100);
+        USDC_PRICE_CHANGE = ((USDC_PRICES[USDC_PRICES.length - 1] - USDC_PRICES[0]) / USDC_PRICES[0]) * 100;
       }
-      if (USDC_PRICES[0] > USDC_PRICES[USDC_PRICES.length-1]){
-        console.log("USDC price went down %", ((USDC_PRICES[0] - USDC_PRICES[USDC_PRICES.length-1])) *100 );
+      if (USDC_PRICES[0] > USDC_PRICES[USDC_PRICES.length - 1]) {
+        console.log("USDC price went down %", ((USDC_PRICES[0] - USDC_PRICES[USDC_PRICES.length - 1])) * 100);
+        USDC_PRICE_CHANGE = ((USDC_PRICES[0] - USDC_PRICES[USDC_PRICES.length - 1])) * -100;
       }
-      if (USDC_PRICES[0] == USDC_PRICES[USDC_PRICES.length-1]){
+      if (USDC_PRICES[0] == USDC_PRICES[USDC_PRICES.length - 1]) {
         console.log("USDC price didn't change");
+        USDC_PRICE_CHANGE = 0;
       }
-      USDC_PRICES.length=0;   
+      USDC_PRICES.pop[0];
+      priceChanges["USDC"] = USDC_PRICE_CHANGE;
     }
-
-    // if (usdcPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2107,26 +1947,22 @@ async function monitorPrice() {
     const usdtPrice = web3.utils.toWei(usdtAmount.toString(), 'Ether')
     console.log('USDT Price:', usdtPrice / 100000000000000000000000000, ' USD')
     USDT_PRICES.push(usdtPrice)
-    if (USDT_PRICES.length >= 10) {
-      if (USDT_PRICES[0] < USDT_PRICES[USDT_PRICES.length-1]){
-        console.log("USDT price went up %", ((USDT_PRICES[USDT_PRICES.length-1] - USDT_PRICES[0])/USDT_PRICES[0]) *100 );
+    if (USDT_PRICES.length >= 6) {
+      if (USDT_PRICES[0] < USDT_PRICES[USDT_PRICES.length - 1]) {
+        console.log("USDT price went up %", ((USDT_PRICES[USDT_PRICES.length - 1] - USDT_PRICES[0]) / USDT_PRICES[0]) * 100);
+        USDT_PRICE_CHANGE = ((USDT_PRICES[USDT_PRICES.length - 1] - USDT_PRICES[0]) / USDT_PRICES[0]) * 100;
       }
-      if (USDT_PRICES[0] > USDT_PRICES[USDT_PRICES.length-1]){
-        console.log("USDT price went down %", ((USDT_PRICES[0] - USDT_PRICES[USDT_PRICES.length-1])) *100 );
+      if (USDT_PRICES[0] > USDT_PRICES[USDT_PRICES.length - 1]) {
+        console.log("USDT price went down %", ((USDT_PRICES[0] - USDT_PRICES[USDT_PRICES.length - 1])) * 100);
+        USDT_PRICE_CHANGE = ((USDT_PRICES[0] - USDT_PRICES[USDT_PRICES.length - 1])) * -100;
       }
-      if (USDT_PRICES[0] == USDT_PRICES[USDT_PRICES.length-1]){
+      if (USDT_PRICES[0] == USDT_PRICES[USDT_PRICES.length - 1]) {
         console.log("USDT price didn't change");
+        USDT_PRICE_CHANGE = 0;
       }
-      USDT_PRICES.length=0;   
+      USDT_PRICES.pop[0];
+      priceChanges["USDT"] = USDT_PRICE_CHANGE;
     }
-
-    // if (usdtPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2140,26 +1976,22 @@ async function monitorPrice() {
     const vetPrice = web3.utils.toWei(vetAmount.toString(), 'Ether')
     console.log('VET Price:', vetPrice / 100000000000000000000000000, ' USD')
     VET_PRICES.push(vetPrice)
-    if (VET_PRICES.length >= 10) {
-      if (VET_PRICES[0] < VET_PRICES[VET_PRICES.length-1]){
-        console.log("VET price went up %", ((VET_PRICES[VET_PRICES.length-1] - VET_PRICES[0])/VET_PRICES[0]) *100 );
+    if (VET_PRICES.length >= 6) {
+      if (VET_PRICES[0] < VET_PRICES[VET_PRICES.length - 1]) {
+        console.log("VET price went up %", ((VET_PRICES[VET_PRICES.length - 1] - VET_PRICES[0]) / VET_PRICES[0]) * 100);
+        VET_PRICE_CHANGE = ((VET_PRICES[VET_PRICES.length - 1] - VET_PRICES[0]) / VET_PRICES[0]) * 100;
       }
-      if (VET_PRICES[0] > VET_PRICES[VET_PRICES.length-1]){
-        console.log("VET price went down %", ((VET_PRICES[0] - VET_PRICES[VET_PRICES.length-1])) *100 );
+      if (VET_PRICES[0] > VET_PRICES[VET_PRICES.length - 1]) {
+        console.log("VET price went down %", ((VET_PRICES[0] - VET_PRICES[VET_PRICES.length - 1])) * 100);
+        VET_PRICE_CHANGE = ((VET_PRICES[0] - VET_PRICES[VET_PRICES.length - 1])) * -100;
       }
-      if (VET_PRICES[0] == VET_PRICES[VET_PRICES.length-1]){
+      if (VET_PRICES[0] == VET_PRICES[VET_PRICES.length - 1]) {
         console.log("VET price didn't change");
+        VET_PRICE_CHANGE = 0;
       }
-      VET_PRICES.length=0;   
+      VET_PRICES.pop[0];
+      priceChanges["VET"] = VET_PRICE_CHANGE;
     }
-
-    // if (vetPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2173,26 +2005,22 @@ async function monitorPrice() {
     const xauPrice = web3.utils.toWei(xauAmount.toString(), 'Ether')
     console.log('XAU Price:', xauPrice / 100000000000000000000000000, ' USD')
     XAU_PRICES.push(xauPrice)
-    if (XAU_PRICES.length >= 10) {
-      if (XAU_PRICES[0] < XAU_PRICES[XAU_PRICES.length-1]){
-        console.log("XAU price went up %", ((XAU_PRICES[XAU_PRICES.length-1] - XAU_PRICES[0])/XAU_PRICES[0]) *100 );
+    if (XAU_PRICES.length >= 6) {
+      if (XAU_PRICES[0] < XAU_PRICES[XAU_PRICES.length - 1]) {
+        console.log("XAU price went up %", ((XAU_PRICES[XAU_PRICES.length - 1] - XAU_PRICES[0]) / XAU_PRICES[0]) * 100);
+        XAU_PRICE_CHANGE = ((XAU_PRICES[XAU_PRICES.length - 1] - XAU_PRICES[0]) / XAU_PRICES[0]) * 100;
       }
-      if (XAU_PRICES[0] > XAU_PRICES[XAU_PRICES.length-1]){
-        console.log("XAU price went down %", ((XAU_PRICES[0] - XAU_PRICES[XAU_PRICES.length-1])) *100 );
+      if (XAU_PRICES[0] > XAU_PRICES[XAU_PRICES.length - 1]) {
+        console.log("XAU price went down %", ((XAU_PRICES[0] - XAU_PRICES[XAU_PRICES.length - 1])) * 100);
+        XAU_PRICE_CHANGE = ((XAU_PRICES[0] - XAU_PRICES[XAU_PRICES.length - 1])) * -100;
       }
-      if (XAU_PRICES[0] == XAU_PRICES[XAU_PRICES.length-1]){
+      if (XAU_PRICES[0] == XAU_PRICES[XAU_PRICES.length - 1]) {
         console.log("XAU price didn't change");
+        XAU_PRICE_CHANGE = 0;
       }
-      XAU_PRICES.length=0;   
+      XAU_PRICES.pop[0];
+      priceChanges["XAU"] = XAU_PRICE_CHANGE;
     }
-
-    // if (xauPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2206,26 +2034,22 @@ async function monitorPrice() {
     const xlmPrice = web3.utils.toWei(xlmAmount.toString(), 'Ether')
     console.log('XLM Price:', xlmPrice / 100000000000000000000000000, ' USD')
     XLM_PRICES.push(xlmPrice)
-    if (XLM_PRICES.length >= 10) {
-      if (XLM_PRICES[0] < XLM_PRICES[XLM_PRICES.length-1]){
-        console.log("XLM price went up %", ((XLM_PRICES[XLM_PRICES.length-1] - XLM_PRICES[0])/XLM_PRICES[0]) *100 );
+    if (XLM_PRICES.length >= 6) {
+      if (XLM_PRICES[0] < XLM_PRICES[XLM_PRICES.length - 1]) {
+        console.log("XLM price went up %", ((XLM_PRICES[XLM_PRICES.length - 1] - XLM_PRICES[0]) / XLM_PRICES[0]) * 100);
+        XLM_PRICE_CHANGE = ((XLM_PRICES[XLM_PRICES.length - 1] - XLM_PRICES[0]) / XLM_PRICES[0]) * 100;
       }
-      if (XLM_PRICES[0] > XLM_PRICES[XLM_PRICES.length-1]){
-        console.log("XLM price went down %", ((XLM_PRICES[0] - XLM_PRICES[XLM_PRICES.length-1])) *100 );
+      if (XLM_PRICES[0] > XLM_PRICES[XLM_PRICES.length - 1]) {
+        console.log("XLM price went down %", ((XLM_PRICES[0] - XLM_PRICES[XLM_PRICES.length - 1])) * 100);
+        XLM_PRICE_CHANGE = ((XLM_PRICES[0] - XLM_PRICES[XLM_PRICES.length - 1])) * -100;
       }
-      if (XLM_PRICES[0] == XLM_PRICES[XLM_PRICES.length-1]){
+      if (XLM_PRICES[0] == XLM_PRICES[XLM_PRICES.length - 1]) {
         console.log("XLM price didn't change");
+        XLM_PRICE_CHANGE = 0;
       }
-      XLM_PRICES.length=0;   
+      XLM_PRICES.pop[0];
+      priceChanges["XLM"] = XLM_PRICE_CHANGE;
     }
-
-    // if (xlmPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2239,26 +2063,22 @@ async function monitorPrice() {
     const xmrPrice = web3.utils.toWei(xmrAmount.toString(), 'Ether')
     console.log('XMR Price:', xmrPrice / 100000000000000000000000000, ' USD')
     XMR_PRICES.push(xmrPrice)
-    if (XMR_PRICES.length >= 10) {
-      if (XMR_PRICES[0] < XMR_PRICES[XMR_PRICES.length-1]){
-        console.log("XMR price went up %", ((XMR_PRICES[XMR_PRICES.length-1] - XMR_PRICES[0])/XMR_PRICES[0]) *100 );
+    if (XMR_PRICES.length >= 6) {
+      if (XMR_PRICES[0] < XMR_PRICES[XMR_PRICES.length - 1]) {
+        console.log("XMR price went up %", ((XMR_PRICES[XMR_PRICES.length - 1] - XMR_PRICES[0]) / XMR_PRICES[0]) * 100);
+        XMR_PRICE_CHANGE = ((XMR_PRICES[XMR_PRICES.length - 1] - XMR_PRICES[0]) / XMR_PRICES[0]) * 100;
       }
-      if (XMR_PRICES[0] > XMR_PRICES[XMR_PRICES.length-1]){
-        console.log("XMR price went down %", ((XMR_PRICES[0] - XMR_PRICES[XMR_PRICES.length-1])) *100 );
+      if (XMR_PRICES[0] > XMR_PRICES[XMR_PRICES.length - 1]) {
+        console.log("XMR price went down %", ((XMR_PRICES[0] - XMR_PRICES[XMR_PRICES.length - 1])) * 100);
+        XMR_PRICE_CHANGE = ((XMR_PRICES[0] - XMR_PRICES[XMR_PRICES.length - 1])) * -100;
       }
-      if (XMR_PRICES[0] == XMR_PRICES[XMR_PRICES.length-1]){
+      if (XMR_PRICES[0] == XMR_PRICES[XMR_PRICES.length - 1]) {
         console.log("XMR price didn't change");
+        XMR_PRICE_CHANGE = 0;
       }
-      XMR_PRICES.length=0;   
+      XMR_PRICES.pop[0];
+      priceChanges["XMR"] = XMR_PRICE_CHANGE;
     }
-
-    // if (xmrPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2272,26 +2092,22 @@ async function monitorPrice() {
     const xrpPrice = web3.utils.toWei(xrpAmount.toString(), 'Ether')
     console.log('XRP Price:', xrpPrice / 100000000000000000000000000, ' USD')
     XRP_PRICES.push(xrpPrice)
-    if (XRP_PRICES.length >= 10) {
-      if (XRP_PRICES[0] < XRP_PRICES[XRP_PRICES.length-1]){
-        console.log("XRP price went up %", ((XRP_PRICES[XRP_PRICES.length-1] - XRP_PRICES[0])/XRP_PRICES[0]) *100 );
+    if (XRP_PRICES.length >= 6) {
+      if (XRP_PRICES[0] < XRP_PRICES[XRP_PRICES.length - 1]) {
+        console.log("XRP price went up %", ((XRP_PRICES[XRP_PRICES.length - 1] - XRP_PRICES[0]) / XRP_PRICES[0]) * 100);
+        XRP_PRICE_CHANGE = ((XRP_PRICES[XRP_PRICES.length - 1] - XRP_PRICES[0]) / XRP_PRICES[0]) * 100;
       }
-      if (XRP_PRICES[0] > XRP_PRICES[XRP_PRICES.length-1]){
-        console.log("XRP price went down %", ((XRP_PRICES[0] - XRP_PRICES[XRP_PRICES.length-1])) *100 );
+      if (XRP_PRICES[0] > XRP_PRICES[XRP_PRICES.length - 1]) {
+        console.log("XRP price went down %", ((XRP_PRICES[0] - XRP_PRICES[XRP_PRICES.length - 1])) * 100);
+        XRP_PRICE_CHANGE = ((XRP_PRICES[0] - XRP_PRICES[XRP_PRICES.length - 1])) * -100;
       }
-      if (XRP_PRICES[0] == XRP_PRICES[XRP_PRICES.length-1]){
+      if (XRP_PRICES[0] == XRP_PRICES[XRP_PRICES.length - 1]) {
         console.log("XRP price didn't change");
+        XRP_PRICE_CHANGE = 0;
       }
-      XRP_PRICES.length=0;   
+      XRP_PRICES.pop[0];
+      priceChanges["XRP"] = XRP_PRICE_CHANGE;
     }
-
-    // if (xrpPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2305,26 +2121,22 @@ async function monitorPrice() {
     const xtzPrice = web3.utils.toWei(xtzAmount.toString(), 'Ether')
     console.log('XTZ Price:', xtzPrice / 100000000000000000000000000, ' USD')
     XTZ_PRICES.push(xtzPrice)
-    if (XTZ_PRICES.length >= 10) {
-      if (XTZ_PRICES[0] < XTZ_PRICES[XTZ_PRICES.length-1]){
-        console.log("XTZ price went up %", ((XTZ_PRICES[XTZ_PRICES.length-1] - XTZ_PRICES[0])/XTZ_PRICES[0]) *100 );
+    if (XTZ_PRICES.length >= 6) {
+      if (XTZ_PRICES[0] < XTZ_PRICES[XTZ_PRICES.length - 1]) {
+        console.log("XTZ price went up %", ((XTZ_PRICES[XTZ_PRICES.length - 1] - XTZ_PRICES[0]) / XTZ_PRICES[0]) * 100);
+        XTZ_PRICE_CHANGE = ((XTZ_PRICES[XTZ_PRICES.length - 1] - XTZ_PRICES[0]) / XTZ_PRICES[0]) * 100;
       }
-      if (XTZ_PRICES[0] > XTZ_PRICES[XTZ_PRICES.length-1]){
-        console.log("XTZ price went down %", ((XTZ_PRICES[0] - XTZ_PRICES[XTZ_PRICES.length-1])) *100 );
+      if (XTZ_PRICES[0] > XTZ_PRICES[XTZ_PRICES.length - 1]) {
+        console.log("XTZ price went down %", ((XTZ_PRICES[0] - XTZ_PRICES[XTZ_PRICES.length - 1])) * 100);
+        XTZ_PRICE_CHANGE = ((XTZ_PRICES[0] - XTZ_PRICES[XTZ_PRICES.length - 1])) * -100;
       }
-      if (XTZ_PRICES[0] == XTZ_PRICES[XTZ_PRICES.length-1]){
+      if (XTZ_PRICES[0] == XTZ_PRICES[XTZ_PRICES.length - 1]) {
         console.log("XTZ price didn't change");
+        XTZ_PRICE_CHANGE = 0;
       }
-      XTZ_PRICES.length=0;   
+      XTZ_PRICES.pop[0];
+      priceChanges["XTZ"] = XTZ_PRICE_CHANGE;
     }
-
-    // if (xtzPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2338,26 +2150,22 @@ async function monitorPrice() {
     const yfiPrice = web3.utils.toWei(yfiAmount.toString(), 'Ether')
     console.log('YFI Price:', yfiPrice / 100000000000000000000000000, ' USD')
     YFI_PRICES.push(yfiPrice)
-    if (YFI_PRICES.length >= 10) {
-      if (YFI_PRICES[0] < YFI_PRICES[YFI_PRICES.length-1]){
-        console.log("YFI price went up %", ((YFI_PRICES[YFI_PRICES.length-1] - YFI_PRICES[0])/YFI_PRICES[0]) *100 );
+    if (YFI_PRICES.length >= 6) {
+      if (YFI_PRICES[0] < YFI_PRICES[YFI_PRICES.length - 1]) {
+        console.log("YFI price went up %", ((YFI_PRICES[YFI_PRICES.length - 1] - YFI_PRICES[0]) / YFI_PRICES[0]) * 100);
+        YFI_PRICE_CHANGE = ((YFI_PRICES[YFI_PRICES.length - 1] - YFI_PRICES[0]) / YFI_PRICES[0]) * 100;
       }
-      if (YFI_PRICES[0] > YFI_PRICES[YFI_PRICES.length-1]){
-        console.log("YFI price went down %", ((YFI_PRICES[0] - YFI_PRICES[YFI_PRICES.length-1])) *100 );
+      if (YFI_PRICES[0] > YFI_PRICES[YFI_PRICES.length - 1]) {
+        console.log("YFI price went down %", ((YFI_PRICES[0] - YFI_PRICES[YFI_PRICES.length - 1])) * 100);
+        YFI_PRICE_CHANGE = ((YFI_PRICES[0] - YFI_PRICES[YFI_PRICES.length - 1])) * -100;
       }
-      if (YFI_PRICES[0] == YFI_PRICES[YFI_PRICES.length-1]){
+      if (YFI_PRICES[0] == YFI_PRICES[YFI_PRICES.length - 1]) {
         console.log("YFI price didn't change");
+        YFI_PRICE_CHANGE = 0;
       }
-      YFI_PRICES.length=0;   
+      YFI_PRICES.pop[0];
+      priceChanges["YFI"] = YFI_PRICE_CHANGE;
     }
-
-    // if (yfiPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
 
   } catch (error) {
     console.error(error)
@@ -2371,27 +2179,22 @@ async function monitorPrice() {
     const zecPrice = web3.utils.toWei(zecAmount.toString(), 'Ether')
     console.log('ZEC Price:', zecPrice / 100000000000000000000000000, ' USD')
     ZEC_PRICES.push(zecPrice)
-    if (ZEC_PRICES.length >= 10) {
-      if (ZEC_PRICES[0] < ZEC_PRICES[ZEC_PRICES.length-1]){
-        console.log("ZEC price went up %", ((ZEC_PRICES[ZEC_PRICES.length-1] - ZEC_PRICES[0])/ZEC_PRICES[0]) *100 );
+    if (ZEC_PRICES.length >= 6) {
+      if (ZEC_PRICES[0] < ZEC_PRICES[ZEC_PRICES.length - 1]) {
+        console.log("ZEC price went up %", ((ZEC_PRICES[ZEC_PRICES.length - 1] - ZEC_PRICES[0]) / ZEC_PRICES[0]) * 100);
+        ZEC_PRICE_CHANGE = ((ZEC_PRICES[ZEC_PRICES.length - 1] - ZEC_PRICES[0]) / ZEC_PRICES[0]) * 100;
       }
-      if (ZEC_PRICES[0] > ZEC_PRICES[ZEC_PRICES.length-1]){
-        console.log("ZEC price went down %", ((ZEC_PRICES[0] - ZEC_PRICES[ZEC_PRICES.length-1])) *100 );
+      if (ZEC_PRICES[0] > ZEC_PRICES[ZEC_PRICES.length - 1]) {
+        console.log("ZEC price went down %", ((ZEC_PRICES[0] - ZEC_PRICES[ZEC_PRICES.length - 1])) * 100);
+        ZEC_PRICE_CHANGE = ((ZEC_PRICES[0] - ZEC_PRICES[ZEC_PRICES.length - 1])) * -100;
       }
-      if (ZEC_PRICES[0] == ZEC_PRICES[ZEC_PRICES.length-1]){
+      if (ZEC_PRICES[0] == ZEC_PRICES[ZEC_PRICES.length - 1]) {
         console.log("ZEC price didn't change");
+        ZEC_PRICE_CHANGE = 0;
       }
-      ZEC_PRICES.length=0;   
+      ZEC_PRICES.pop[0];
+      priceChanges["ZEC"] = ZEC_PRICE_CHANGE;
     }
-
-    // if (zecPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
-
   } catch (error) {
     console.error(error)
     monitoringPrice = false
@@ -2404,27 +2207,22 @@ async function monitorPrice() {
     const zrxPrice = web3.utils.toWei(zrxAmount.toString(), 'Ether')
     console.log('ZRX Price:', zrxPrice / 100000000000000000000000000, ' USD')
     ZRX_PRICES.push(zrxPrice)
-    if (ZRX_PRICES.length >= 10) {
-      if (ZRX_PRICES[0] < ZRX_PRICES[ZRX_PRICES.length-1]){
-        console.log("ZRX price went up %", ((ZRX_PRICES[ZRX_PRICES.length-1] - ZRX_PRICES[0])/ZRX_PRICES[0]) *100 );
+    if (ZRX_PRICES.length >= 6) {
+      if (ZRX_PRICES[0] < ZRX_PRICES[ZRX_PRICES.length - 1]) {
+        console.log("ZRX price went up %", ((ZRX_PRICES[ZRX_PRICES.length - 1] - ZRX_PRICES[0]) / ZRX_PRICES[0]) * 100);
+        ZRX_PRICE_CHANGE = ((ZRX_PRICES[ZRX_PRICES.length - 1] - ZRX_PRICES[0]) / ZRX_PRICES[0]) * 100;
       }
-      if (ZRX_PRICES[0] > ZRX_PRICES[ZRX_PRICES.length-1]){
-        console.log("ZRX price went down %", ((ZRX_PRICES[0] - ZRX_PRICES[ZRX_PRICES.length-1])) *100 );
+      if (ZRX_PRICES[0] > ZRX_PRICES[ZRX_PRICES.length - 1]) {
+        console.log("ZRX price went down %", ((ZRX_PRICES[0] - ZRX_PRICES[ZRX_PRICES.length - 1])) * 100);
+        ZRX_PRICE_CHANGE = ((ZRX_PRICES[0] - ZRX_PRICES[ZRX_PRICES.length - 1])) * -100;
       }
-      if (ZRX_PRICES[0] == ZRX_PRICES[ZRX_PRICES.length-1]){
+      if (ZRX_PRICES[0] == ZRX_PRICES[ZRX_PRICES.length - 1]) {
         console.log("ZRX price didn't change");
+        ZRX_PRICE_CHANGE = 0;
       }
-      ZRX_PRICES.length=0;   
+      ZRX_PRICES.pop[0];
+      priceChanges["ZRX"] = ZRX_PRICE_CHANGE;
     }
-
-    // if (zrxPrice <= ETH_SELL_PRICE) {
-    //   console.log('Selling Matic...')
-    //   await checkBalances()
-    //   await sellEth(ETH_AMOUNT, daiAmount)
-    //   await checkBalances()
-    //   clearInterval(priceMonitor)
-    // }
-
   } catch (error) {
     console.error(error)
     monitoringPrice = false
@@ -2432,14 +2230,32 @@ async function monitorPrice() {
     return
   }
 
-
-
-
-
-
+  AnalyzePriceChanges()
   monitoringPrice = false
 }
 
+async function AnalyzePriceChanges() {
+  var bestChange = 0
+  var bestCoin = ""
+  var worstChange = 0
+  var worstCoin = ""
+  for (var key in priceChanges) {
+    var value = priceChanges[key];
+    if (value > bestChange) {
+      bestChange = value;
+      bestCoin = key;
+    }
+    if (value < worstChange) {
+      worstChange = value;
+      worstCoin = key;
+    }
+  }
+  console.log(bestCoin, " has the best percentage change of %", bestChange)
+  console.log(worstCoin, " has the worst percentage change of -%", worstChange)
+  var maticBalance = await web3.eth.getBalance("0x37d25aE1Ed276e4BBaF1254c24d95066879f06b7")
+  console.log(maticBalance / 1000000000000000000)
+}
+
 // Check markets every n seconds`
-const POLLING_INTERVAL = process.env.POLLING_INTERVAL || 1000 // 1 Second
+const POLLING_INTERVAL = process.env.POLLING_INTERVAL || 10000 // 1 Second = 1000
 priceMonitor = setInterval(async () => { await monitorPrice() }, POLLING_INTERVAL)
