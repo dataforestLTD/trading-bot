@@ -24,7 +24,7 @@ const Moralis = require('moralis/node');
 Moralis.start({ serverUrl, appId });
 
 // LOAD COIN ADDRESSES FROM JSON, MAKE LISTS
-const tokenList = require('./contracts.json');
+const tokenList = require('./watchTokens.json');
 const priceChanges = {};
 const currentPriceTrend = {};
 const currentHodl = {};
@@ -56,7 +56,7 @@ async function monitorPrice() {
     // GET TOKEN PRICE
     try {
       var tokenPrice = await Moralis.Web3API.token.getTokenPrice(options);
-      console.log(obj.ticker, "$", tokenPrice.usdPrice);
+      console.log(obj.ticker, "has a value of $", tokenPrice.usdPrice);
       var changes = [priceChanges[obj.tokenAddress]];
       changes[0].push(tokenPrice.usdPrice);
       priceChanges[obj.tokenAddress] = changes[0];

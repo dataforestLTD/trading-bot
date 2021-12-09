@@ -16,14 +16,6 @@
                 "tokenAddress": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270"
         },
         {
-                "ticker": "BNB",
-                "tokenAddress": "0x3BA4c387f786bFEE076A58914F5Bd38d668B42c3"
-        },
-        {
-                "ticker": "CRO",
-                "tokenAddress": "0xada58df0f643d959c2a47c9d4d4c1a4defe3f11c"
-        },
-        {
                 "ticker": "wBTC",
                 "tokenAddress": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6"
         },
@@ -40,10 +32,6 @@
                 "tokenAddress": "0xa1c57f48f0deb89f569dfbe6e2b7f46d33606fd4"
         },
         {
-                "ticker": "THETA",
-                "tokenAddress": "0xb46e0ae620efd98516f49bb00263317096c114b2"
-        },
-        {
                 "ticker": "SAND",
                 "tokenAddress": "0xc6d54d2f624bc83815b49d9c2203b1330b841ca0"
         },
@@ -58,14 +46,6 @@
         {
                 "ticker": "LEO",
                 "tokenAddress": "0x06d02e9d62a13fc76bb229373fb3bbbd1101d2fc"
-        },
-        {
-                "ticker": "LRC",
-                "tokenAddress": "0x84e1670f61347cdaed56dcc736fb990fbb47ddc1"
-        },
-        {
-                "ticker": "ENJ",
-                "tokenAddress": "0x7ec26842f195c852fa843bb9f6d8b583a274a157"
         },
         {
                 "ticker": "AMP",
@@ -112,24 +92,8 @@
                 "tokenAddress": "0x50b728d8d964fd00c2d0aad81718b71311fef68a"
         },
         {
-                "ticker": "IOTX",
-                "tokenAddress": "0xf6372cdb9c1d3674e83842e3800f2a62ac9f3c66"
-        },
-        {
-                "ticker": "LPT",
-                "tokenAddress": "0x3962f4a0a0051dcce0be73a7e09cef5756736712"
-        },
-        {
-                "ticker": "OMG",
-                "tokenAddress": "0x62414d03084eeb269e18c970a21f45d2967f0170"
-        },
-        {
                 "ticker": "BNT",
                 "tokenAddress": "0xc26d47d5c33ac71ac5cf9f776d63ba292a4f7842"
-        },
-        {
-                "ticker": "RPL",
-                "tokenAddress": "0x7205705771547cf79201111b4bd8aaf29467b9ec"
         },
         {
                 "ticker": "YFI",
@@ -138,14 +102,6 @@
         {
                 "ticker": "TEL",
                 "tokenAddress": "0xdf7837de1f2fa4631d716cf2502f8b230f1dcc32"
-        },
-        {
-                "ticker": "FXS",
-                "tokenAddress": "0x5559edb74751a0ede9dea4dc23aee72cca6be3d5"
-        },
-        {
-                "ticker": "UMA",
-                "tokenAddress": "0x3066818837c5e6ed6601bd5a91b0762877a6b731"
         },
         {
                 "ticker": "GNO",
@@ -160,10 +116,6 @@
                 "tokenAddress": "0x61299774020da444af134c82fa83e3810b309991"
         },
         {
-                "ticker": "SRM",
-                "tokenAddress": "0x6bf2eb299e51fc5df30dec81d9445dde70e3f185"
-        },
-        {
                 "ticker": "OCEAN",
                 "tokenAddress": "0x282d8efce846a88b159800bd4130ad77443fa1a1"
         },
@@ -174,10 +126,6 @@
         {
                 "ticker": "MASK",
                 "tokenAddress": "0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7"
-        },
-        {
-                "ticker": "XYO",
-                "tokenAddress": "0xd2507e7b5794179380673870d88b22f94da6abe0"
         },
         {
                 "ticker": "KLIMA",
@@ -192,24 +140,8 @@
                 "tokenAddress": "0x7583feddbcefa813dc18259940f76a02710a8905"
         },
         {
-                "ticker": "INJ",
-                "tokenAddress": "0x4e8dc2149eac3f3def36b1c281ea466338249371"
-        },
-        {
-                "ticker": "KEEP",
-                "tokenAddress": "0x42f37a1296b2981f7c3caced84c5096b2eb0c72c"
-        },
-        {
                 "ticker": "WOO",
                 "tokenAddress": "0x1b815d120b3ef02039ee11dc2d33de7aa4a8c603"
-        },
-        {
-                "ticker": "SXP",
-                "tokenAddress": "0x6abb753c1893194de4a83c6e8b4eadfc105fd5f5"
-        },
-        {
-                "ticker": "PAXG",
-                "tokenAddress": "0x553d3d295e0f695b9228246232edf400ed3560b5"
         },
         {
                 "ticker": "OGN",
@@ -224,40 +156,12 @@
                 "tokenAddress": "0x614389eaae0a6821dc49062d56bda3d9d45fa2ff"
         },
         {
-                "ticker": "POLY",
-                "tokenAddress": "0xcb059c5573646047d6d88dddb87b745c18161d3b"
-        },
-        {
-                "ticker": "BAND",
-                "tokenAddress": "0xa8b1e0764f85f53dfe21760e8afe5446d82606ac"
-        },
-        {
-                "ticker": "OXT",
-                "tokenAddress": "0x9880e3dda13c8e7d4804691a45160102d31f6060"
-        },
-        {
-                "ticker": "RLC",
-                "tokenAddress": "0xbe662058e00849c3eef2ac9664f37fefdf2cdbfe"
-        },
-        {
                 "ticker": "POWR",
                 "tokenAddress": "0x0aab8dc887d34f00d50e19aee48371a941390d14"
         },
         {
-                "ticker": "AGIX",
-                "tokenAddress": "0x190eb8a183d22a4bdf278c6791b152228857c033"
-        },
-        {
-                "ticker": "aETHc",
-                "tokenAddress": "0xc4e82ba0fe6763cbe5e9cbca0ba7cbd6f91c6018"
-        },
-        {
                 "ticker": "ETH2x-FLI",
                 "tokenAddress": "0x66d7fdcc7403f18cae9b0e2e8385649d2acbc12a"
-        },
-        {
-                "ticker": "ICE",
-                "tokenAddress": "0xdf00c50a3dae240860f57b77508203b8d9593283"
         },
         {
                 "ticker": "GHST",
@@ -292,16 +196,8 @@
                 "tokenAddress": "0xe2341718c6c0cbfa8e6686102dd8fbf4047a9e9b"
         },
         {
-                "ticker": "BLZ",
-                "tokenAddress": "0x438b28c5aa5f00a817b7def7ce2fb3d5d1970974"
-        },
-        {
                 "ticker": "BIFI",
                 "tokenAddress": "0xfbdd194376de19a88118e84e279b977f165d01b8"
-        },
-        {
-                "ticker": "LCX",
-                "tokenAddress": "0xe8a51d0dd1b4525189dda2187f90ddf0932b5482"
         },
         {
                 "ticker": "FOX",
@@ -322,10 +218,6 @@
         {
                 "ticker": "QUICK",
                 "tokenAddress": "0x831753dd7087cac61ab5644b308642cc1c33dc13"
-        },
-        {
-                "ticker": "LEND",
-                "tokenAddress": "0x313d009888329c9d1cf4f75ca3f32566335bd604"
         },
         {
                 "ticker": "FORTH",
