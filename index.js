@@ -23,54 +23,15 @@ const apiKey = process.env.MOR_API_KEY;
 const Moralis = require('moralis/node');
 Moralis.start({ serverUrl, appId });
 
-// LOAD COIN ADDRESSES FROM JSON MAKE LISTS
+// LOAD COIN ADDRESSES FROM JSON, MAKE LISTS
 const tokenList = require('./contracts.json');
 const priceChanges = {};
 const currentPriceTrend = {};
 const currentHodl = {};
 
-// Minimum eth to swap  
-const ETH_AMOUNT = web3.utils.toWei('1', 'Ether')
-console.log("Eth Amount", ETH_AMOUNT)
-
-const ETH_SELL_PRICE = web3.utils.toWei('20000', 'Ether') // 200 Dai a.k.a. $200 USD
-
+// POPULATE PRICE CHANGE DICT, SO JS KNOWS VALUE IS LIST
 for (var i = 0; i < tokenList.length; i++) {
   priceChanges[tokenList[i].tokenAddress] = [];
-}
-
-async function sellEth(ethAmount, daiAmount) {
-  const moment = require('moment') // import moment.js library
-  const now = moment().unix() // fetch current unix timestamp
-  const DEADLINE = now + 60 // add 60 seconds
-  console.log("Deadline", DEADLINE)
-
-  // Transaction Settings
-  const SETTINGS = {
-    gasLimit: 8000000, // Override gas settings: https://github.com/ethers-io/ethers.js/issues/469
-    gasPrice: web3.utils.toWei('50', 'Gwei'),
-    from: process.env.ACCOUNT, // Use your account here
-    value: ethAmount // Amount of Ether to Swap
-  }
-
-  // Perform Swap
-  console.log('Performing swap...')
-  let result = await exchangeContract.methods.ethToTokenSwapInput(daiAmount.toString(), DEADLINE).send(SETTINGS)
-  console.log(`Successful Swap: https://ropsten.etherscan.io/tx/${result.transactionHash}`)
-}
-
-async function checkBalances() {
-  let balance
-
-  // Check Ether balance swap
-  balance = await web3.eth.getBalance(process.env.ACCOUNT)
-  balance = web3.utils.toWei(balance, 'Ether')
-  console.log("Ether Balance:", balance)
-
-  // Check Dai balance swap
-  balance = await daiContract.methods.balanceOf(process.env.ACCOUNT).call()
-  balance = web3.utils.toWei(balance, 'Ether')
-  console.log("Dai Balance:", balance)
 }
 
 let priceMonitor
@@ -84,6 +45,7 @@ async function monitorPrice() {
   console.log("Checking price...")
   monitoringPrice = true
 
+  // LOOP THROUGH CONTRACT LIST
   for (var i = 0; i < tokenList.length; i++) {
     var obj = tokenList[i];
     var options = {
@@ -91,11 +53,12 @@ async function monitorPrice() {
       chain: "polygon",
       exchange: "quickswap"
     }
+    // GET TOKEN PRICE
     try {
       var tokenPrice = await Moralis.Web3API.token.getTokenPrice(options);
-      console.log(obj.ticker, "$", tokenPrice.usdPrice.toFixed(18));
+      console.log(obj.ticker, "$", tokenPrice.usdPrice);
       var changes = [priceChanges[obj.tokenAddress]];
-      changes[0].push(tokenPrice.usdPrice.toFixed(18));
+      changes[0].push(tokenPrice.usdPrice);
       priceChanges[obj.tokenAddress] = changes[0];
     }
     catch (error) {
@@ -107,15 +70,16 @@ async function monitorPrice() {
         console.log("No Price Found for", obj.ticker);
       }
     }
+    // CHECK PRICE CHANGES
     if (priceChanges[obj.tokenAddress].length >= 6) {
       var tokenChange = 0;
       if (priceChanges[obj.tokenAddress][0] < priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1]) {
         console.log(obj.ticker, "price went up %", ((priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1] - priceChanges[obj.tokenAddress][0]) / priceChanges[obj.tokenAddress][0]) * 100);
-        tokenChange = (((priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1] - priceChanges[obj.tokenAddress][0]) / priceChanges[obj.tokenAddress][0]) * 100).toFixed(18);
+        tokenChange = (((priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1] - priceChanges[obj.tokenAddress][0]) / priceChanges[obj.tokenAddress][0]) * 100);
       }
       if (priceChanges[obj.tokenAddress][0] > priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1]) {
         console.log(obj.ticker, "price went down %", ((priceChanges[obj.tokenAddress][0] - priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1])) * 100);
-        tokenChange = (((priceChanges[obj.tokenAddress][0] - priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1])) * -100).toFixed(18);
+        tokenChange = (((priceChanges[obj.tokenAddress][0] - priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1])) * -100);
       }
       if (priceChanges[obj.tokenAddress][0] == priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1]) {
         console.log(obj.ticker, "price didn't change");
@@ -147,8 +111,6 @@ async function AnalyzePriceChanges() {
   }
   console.log(bestCoin, " has the best percentage change of %", bestChange);
   console.log(worstCoin, " has the worst percentage change of -%", worstChange);
-  var maticBalance = await web3.eth.getBalance("0x37d25aE1Ed276e4BBaF1254c24d95066879f06b7");
-  console.log(maticBalance / 1000000000000000000)
 }
 
 // Check markets every n seconds`
