@@ -13,6 +13,7 @@
   "dependencies": {
     "@truffle/hdwallet-provider": "^1.0.35",
     "axios": "^0.24.0",
+    "black": "^0.3.0",
     "console.table": "^0.10.0",
     "dotenv": "^8.2.0",
     "ejs": "^2.5.6",
@@ -21,8 +22,8 @@
     "lodash": "^4.17.15",
     "moment": "^2.25.3",
     "moment-timezone": "^0.5.28",
+    "moralis": "^0.0.151",
     "numeral": "^2.0.6",
-    "uniswap-polygon-sdk": "^3.0.6",
     "web3": "^1.6.1"
   },
   "devDependencies": {
