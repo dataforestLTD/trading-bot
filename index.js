@@ -1,36 +1,33 @@
-/*
-                                               _..
-                                           .qd$$$$bp.
-                                         .q$$$$$$$$$$m.
-                                        .$$$$$$$$$$$$$$
-                                      .q$$$$$$$$$$$$$$$$
-                                     .$$$$$$$$$$$$P\$$$$;
-                                   .q$$$$$$$$$P^"_.`;$$$$
-                                  q$$$$$$$P;\   ,  /$$$$P
-                                .$$$P^::Y$/`  _  .:.$$$/
-                               .P.:..    \ `._.-:.. \$P
-                               $':.  __.. :   :..    :'
-                              /:_..::.   `. .:.    .'|
-                            _::..          T:..   /  :
-                         .::..             J:..  :  :
-                      .::..          7:..   F:.. :  ;
-                  _.::..             |:..   J:.. `./
-             _..:::..               /J:..    F:.  :
-           .::::..                .T  \:..   J:.  /
-          /:::...               .' `.  \:..   F_o'
-         .:::...              .'     \  \:..  J ;
-         ::::...           .-'`.    _.`._\:..  \'
-         ':::...         .'  `._7.-'_.-  `\:.   \
-          \:::...   _..-'__.._/_.--' ,:.   b:.   \._
-           `::::..-"_.'-"_..--"      :..   /):.   `.\
-             `-:/"-7.--""            _::.-'P::..    \}
-  _....------""""""            _..--".-'   \::..     `.
- (::..              _...----"""  _.-'       `---:..    `-.
-  \::..      _.-""""   `""""---""                `::...___)
-   `\:._.-"""                    I HEART BOOBIES
+/*                                            _..
+.                                            .qd$$$$bp.
+.                                         .q$$$$$$$$$$m.
+.                                        .$$$$$$$$$$$$$$
+.                                      .q$$$$$$$$$$$$$$$$
+.                                     .$$$$$$$$$$$$P\$$$$;
+.                                   .q$$$$$$$$$P^"_.`;$$$$
+.                                  q$$$$$$$P;\   ,  /$$$$P
+.                                .$$$P^::Y$/`  _  .:.$$$/
+.                               .P.:..    \ `._.-:.. \$P
+.                               $':.  __.. :   :..    :'
+.                              /:_..::.   `. .:.    .'|
+.                            _::..          T:..   /  :
+.                         .::..             J:..  :  :
+.                      .::..          7:..   F:.. :  ;
+.                  _.::..             |:..   J:.. `./
+.             _..:::..               /J:..    F:.  :
+.           .::::..                .T  \:..   J:.  /
+.          /:::...               .' `.  \:..   F_o'
+.         .:::...              .'     \  \:..  J ;
+.         ::::...           .-'`.    _.`._\:..  \'
+.         ':::...         .'  `._7.-'_.-  `\:.   \
+.          \:::...   _..-'__.._/_.--' ,:.   b:.   \._
+.           `::::..-"_.'-"_..--"      :..   /):.   `.\
+.             `-:/"-7.--""            _::.-'P::..    \}
+.  _....------""""""            _..--".-'   \::..     `.
+. (::..              _...----"""  _.-'       `---:..    `-.
+.  \::..      _.-""""   `""""---""                `::...___)
+.   `\:._.-"""               HODL BEWBS, NOT COINS*/
 
-------------------------------------------------
-*/
 // BASE REQUIREMENTS
 require('dotenv').config();
 const express = require('express');
@@ -58,8 +55,8 @@ const Moralis = require('moralis/node');
 Moralis.start({ serverUrl, appId });
 
 // ACCOUNT CONFIG
-
 const ACCOUNT = process.env.ACCOUNT;
+const HODL_ACCOUNT = process.env.HODL_ACCOUNT;
 
 // LOAD COIN ADDRESSES FROM JSON, MAKE LISTS
 const tokenList = require('./watchTokens.json');
@@ -75,20 +72,19 @@ const console = require('console');
 const qsAddress = "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"
 const qsSwapContract = new web3.eth.Contract(qsABI, qsAddress);
 
-// POPULATE PRICE CHANGE DICT, SO JS KNOWS VALUE IS LIST
+// POPULATE PRICE CHANGE DICT
 for (var i = 0; i < tokenList.length; i++) {
   priceChanges[tokenList[i].tokenAddress] = [];
 }
 
 let priceMonitor;
 let monitoringPrice = false;
+let executingTrade = false;
 
 async function monitorPrice() {
   if (monitoringPrice) {
     return;
   }
-
-  console.log("Checking price...");
   monitoringPrice = true;
 
   // LOOP THROUGH CONTRACT LIST
@@ -122,11 +118,11 @@ async function monitorPrice() {
       var tokenChange = 0;
       if (priceChanges[obj.tokenAddress][0] < priceChanges[obj.tokenAddress][1]) {
         console.log(obj.ticker, "price went up %", ((priceChanges[obj.tokenAddress][1] - priceChanges[obj.tokenAddress][0]) / priceChanges[obj.tokenAddress][0]) * 100);
-        tokenChange = (((priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1] - priceChanges[obj.tokenAddress][0]) / priceChanges[obj.tokenAddress][0]) * 100).toFixed(18);
+        tokenChange = (((priceChanges[obj.tokenAddress][1] - priceChanges[obj.tokenAddress][0]) / priceChanges[obj.tokenAddress][0]) * 100);
       }
       if (priceChanges[obj.tokenAddress][0] > priceChanges[obj.tokenAddress][1]) {
-        console.log(obj.ticker, "price went down %", ((priceChanges[obj.tokenAddress][0] - priceChanges[obj.tokenAddress][1])) * 100);
-        tokenChange = (((priceChanges[obj.tokenAddress][0] - priceChanges[obj.tokenAddress][priceChanges[obj.tokenAddress].length - 1])) * -100).toFixed(18);
+        console.log(obj.ticker, "price went down %", ((priceChanges[obj.tokenAddress][0] - priceChanges[obj.tokenAddress][1]) / priceChanges[obj.tokenAddress][0]) * 100);
+        tokenChange = (((priceChanges[obj.tokenAddress][0] - priceChanges[obj.tokenAddress][1]) / priceChanges[obj.tokenAddress][0]) * -100);
       }
       if (priceChanges[obj.tokenAddress][0] == priceChanges[obj.tokenAddress][1]) {
         console.log(obj.ticker, "price didn't change");
@@ -136,8 +132,9 @@ async function monitorPrice() {
       currentPriceTrend[obj.tokenAddress] = tokenChange;
     }
   }
+  console.log(priceChanges);
   AnalyzePriceChanges();
-  CashOut();
+  // CashOut();
   monitoringPrice = false;
 }
 
@@ -152,17 +149,19 @@ async function AnalyzePriceChanges() {
   console.log(tempTop5.slice(0, 5));
 }
 
+// THE SKY IS FALLING, SELL IT ALL
 async function CashOut() {
   const options = { chain: 'polygon', address: ACCOUNT };
   const balances = await Moralis.Web3API.account.getTokenBalances(options);
-  // console.log(balances);
+  console.log("Oh no, everything is dipping, thankfully you created me master.");
   for (var i = 0; i < balances.length; i++) {
     ConvertToStable(balances[i].token_address, balances[i].balance, balances[i].decimals);
   }
 }
-async function ConvertToStable(tokenIn, amountToTrade, decimals) {
 
-  // POPULATE SETTINGS
+// CONVERT TOKEN TO STABLE COIN
+async function ConvertToStable(tokenIn, amountToTrade, decimals) {
+  // POPULATE INFO FOR SETTINGS
   const moment = require('moment')
   const now = moment().unix()
   const DEADLINE = now + 60
@@ -180,9 +179,10 @@ async function ConvertToStable(tokenIn, amountToTrade, decimals) {
     "0x22e51bae3f545255e115090202a23c7ede0b00b9"
   ]
 
-  // IGNORE IF COIN IS STABLE OR SHIT
+  // IGNORE IF COIN IS STABLE OR SHIT (PREVENT CYCLING TRADES IN CASH OUT, ERRORS FROM SHIT COINS)
   if (!STABLE_COINS.includes(tokenIn) && !SHIT_COINS.includes(tokenIn)) {
     try {
+      // SET OPTIONS AND SETTINGS FOR APPROVE/SWAP
       const OPTIONS = {
         address: tokenIn,
         chain: "polygon",
@@ -190,13 +190,13 @@ async function ConvertToStable(tokenIn, amountToTrade, decimals) {
       }
       const SETTINGS = {
         gasLimit: 8000000,
-        gasPrice: web3.utils.toWei('75', 'Gwei'),
+        gasPrice: web3.utils.toWei('50', 'Gwei'),
         from: ACCOUNT,
       }
 
-      // SETTINGS FOR APPROVE AND SWAP
+      // GET SWAP AMOUNT BASED ON TOKEN PRICE
       const tokenPriceForSwap = await Moralis.Web3API.token.getTokenPrice(OPTIONS);
-      const totalValue = (Moralis.Units.FromWei(amountToTrade, decimals) * (tokenPriceForSwap.usdPrice * 0.98));
+      const totalValue = (Moralis.Units.FromWei(amountToTrade, decimals) * (tokenPriceForSwap.usdPrice * 0.99));
       const buyAmount = Moralis.Units.Token(totalValue.toFixed(2), "6");
       const approveAmount = Moralis.Units.Token((totalValue).toFixed(2), "18");
 
@@ -211,21 +211,27 @@ async function ConvertToStable(tokenIn, amountToTrade, decimals) {
       if (buyAmount < currentApproval) {
         if (currentApproval == 0) {
           console.log("No approval, approving spend of", approveAmount);
+          executingTrade = true;
           await tokenContract.methods.approve(qsAddress, approveAmount).send(SETTINGS);
           let result = await qsSwapContract.methods.swapExactTokensForTokens(BigInt(amountToTrade), buyAmount, [tokenIn, MATIC, USDT], ACCOUNT, DEADLINE).send(SETTINGS)
           console.log(`\nSuccessful Swap: https://polygonscan.com/tx/${result.transactionHash}\n`);
+          executingTrade = false;
         }
         else {
           console.log("Current approval too low, increasing to", approveAmount);
+          executingTrade = true;
           await tokenContract.methods.increaseAllowance(qsAddress, approveAmount).send(SETTINGS);
           let result = await qsSwapContract.methods.swapExactTokensForTokens(BigInt(amountToTrade), buyAmount, [tokenIn, MATIC, USDT], ACCOUNT, DEADLINE).send(SETTINGS)
           console.log(`\nSuccessful Swap: https://polygonscan.com/tx/${result.transactionHash}\n`);
+          executingTrade = false;
         }
       }
       else {
         console.log("Within approved amount, swapping")
-        let result = await qsSwapContract.methods.swapExactTokensForTokens(BigInt(amountToTrade), buyAmount, [tokenIn, MATIC, USDT], ACCOUNT, DEADLINE).send(SETTINGS)
+        executingTrade = true;
+        let result = await qsSwapContract.methods.swapExactTokensForTokens(BigInt(amountToTrade), buyAmount, [tokenIn, ETH, USDT], ACCOUNT, DEADLINE).send(SETTINGS)
         console.log(`\nSuccessful Swap: https://polygonscan.com/tx/${result.transactionHash}\n`);
+        executingTrade = false;
       }
     }
 
@@ -239,5 +245,5 @@ async function ConvertToStable(tokenIn, amountToTrade, decimals) {
 
 
 // Check markets every n seconds`
-const POLLING_INTERVAL = process.env.POLLING_INTERVAL || 1000 // 1 Second = 1000
+const POLLING_INTERVAL = 1000 // 1 Second = 1000
 priceMonitor = setInterval(async () => { await monitorPrice() }, POLLING_INTERVAL)
