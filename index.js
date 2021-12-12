@@ -75,7 +75,7 @@ const currentHodl = {};
 // SET QUICKSWAP CONTRACT
 const QUICKSWAP_ABI = require('./quickswapABI.json');
 const QUICKSWAP_ADDRESS = "0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff"
-const QUICKSWAP_CONTRACT = new web3.eth.Contract(QUICKSWAP_ABI, QUICKSWAP_ADDRESS);
+
 
 // POPULATE PRICE CHANGE DICT
 for (var i = 0; i < WATCH_COINS.length; i++) {
@@ -104,6 +104,7 @@ async function monitorPrice() {
       chain: "polygon",
       exchange: "quickswap"
     }
+
     // GET TOKEN PRICE
     try {
       var tokenPrice = await Moralis.Web3API.token.getTokenPrice(options);
@@ -181,7 +182,9 @@ async function SwapCoins(tokenIn, tokenOut, amountToTrade) {
   const MATIC = "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270";
   const QUICK = "0x831753dd7087cac61ab5644b308642cc1c33dc13";
   const ETH = "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619";
+  const USDC = "0x2791bca1f2de4661ed88a30c99a7a9449aa84174";
   const USDT = "0xc2132d05d31c914a87c6611c10748aeb04b58e8f";
+  const miMATIC = "0xa3fa99a148fa48d14ed51d610c367c61876997f1";
 
   try {
     // SET OPTIONS AND SETTINGS FOR APPROVE/SWAP
@@ -213,32 +216,44 @@ async function SwapCoins(tokenIn, tokenOut, amountToTrade) {
     const ethIn = Moralis.Units.FromWei(amountToTrade, tokenInDecimals);
     const cashIn = (ethIn * tokenInPrice.usdPrice * SLIPPAGE).toFixed(18);
     const converted = cashIn / tokenOutPrice.usdPrice;
+    const approvalConverted = (cashIn / tokenOutPrice.usdPrice) * 100;
     console.log(converted);
-    const weiOut = Moralis.Units.Token(converted, tokenOutDecimals);
-    // const weiOut = BigInt((converted * (Math.pow(10, tokenOutDecimals))).toFixed(0));
+    // const weiOut = Moralis.Units.Token(converted, tokenOutDecimals);
+    const weiOut = BigInt((converted * (Math.pow(10, tokenOutDecimals))).toFixed(0));
+    const approveAmount = BigInt(approvalConverted.toFixed(0));
 
     // TOKEN CONTRACT SETTINGS      
     const address = tokenIn;
     const tokenContract = new web3.eth.Contract(ERC20_ABI, address);
+    const QUICKSWAP_CONTRACT = new web3.eth.Contract(QUICKSWAP_ABI, QUICKSWAP_ADDRESS);
 
     // CHECK FOR APPROVAL AND EXECUTE TRADE
     const currentApproval = await tokenContract.methods.allowance(ACCOUNT, QUICKSWAP_ADDRESS).call();
+    const biApproval = BigInt(currentApproval);
     console.log("\nCashing out $", cashIn, "\n");
+    console.log("\n", currentApproval, biApproval, weiOut, "\n");
+    // executingTrade = true;
+    // await tokenContract.methods.approve(QUICKSWAP_ADDRESS, weiOut).send(SETTINGS);
+    // let result = await QUICKSWAP_CONTRACT.methods.swapExactTokensForTokens(BigInt(amountToTrade), weiOut, [tokenIn, ETH, tokenOut], ACCOUNT, DEADLINE).send(SETTINGS)
+    // console.log(`\nSuccessful Swap: https://polygonscan.com/tx/${result.transactionHash}\n`);
+    // executingTrade = false;
 
-    if (weiOut > currentApproval) {
+
+
+    if (weiOut >= currentApproval) {
       if (currentApproval == 0) {
         console.log("\nNo approval, approving spend of", weiOut, "\n");
         executingTrade = true;
-        await tokenContract.methods.approve(QUICKSWAP_ADDRESS, weiOut).send(SETTINGS);
-        let result = await QUICKSWAP_CONTRACT.methods.swapExactTokensForTokens(BigInt(amountToTrade), weiOut, [tokenIn, QUICK, tokenOut], ACCOUNT, DEADLINE).send(SETTINGS)
+        await tokenContract.methods.approve(QUICKSWAP_ADDRESS, approveAmount).send(SETTINGS);
+        let result = await QUICKSWAP_CONTRACT.methods.swapExactTokensForTokens(BigInt(amountToTrade), weiOut, [tokenIn, ETH, tokenOut], ACCOUNT, DEADLINE).send(SETTINGS)
         console.log(`\nSuccessful Swap: https://polygonscan.com/tx/${result.transactionHash}\n`);
         executingTrade = false;
       }
       else {
         console.log("\nCurrent approval too low, increasing to", weiOut, "\n");
         executingTrade = true;
-        await tokenContract.methods.increaseAllowance(QUICKSWAP_ADDRESS, weiOut).send(SETTINGS);
-        let result = await QUICKSWAP_CONTRACT.methods.swapExactTokensForTokens(BigInt(amountToTrade), weiOut, [tokenIn, QUICK, tokenOut], ACCOUNT, DEADLINE).send(SETTINGS)
+        await tokenContract.methods.increaseAllowance(QUICKSWAP_ADDRESS, approveAmount).send(SETTINGS);
+        let result = await QUICKSWAP_CONTRACT.methods.swapExactTokensForTokens(BigInt(amountToTrade), weiOut, [tokenIn, MATIC, tokenOut], ACCOUNT, DEADLINE).send(SETTINGS)
         console.log(`\nSuccessful Swap: https://polygonscan.com/tx/${result.transactionHash}\n`);
         executingTrade = false;
       }
@@ -246,7 +261,7 @@ async function SwapCoins(tokenIn, tokenOut, amountToTrade) {
     else {
       console.log("\nWithin approved amount, swapping\n")
       executingTrade = true;
-      let result = await QUICKSWAP_CONTRACT.methods.swapExactTokensForTokens(BigInt(amountToTrade), weiOut, [tokenIn, QUICK, tokenOut], ACCOUNT, DEADLINE).send(SETTINGS)
+      let result = await QUICKSWAP_CONTRACT.methods.swapExactTokensForTokens(BigInt(amountToTrade), weiOut, [tokenIn, MATIC, tokenOut], ACCOUNT, DEADLINE).send(SETTINGS)
       console.log(`\nSuccessful Swap: https://polygonscan.com/tx/${result.transactionHash}\n`);
       executingTrade = false;
     }
@@ -256,6 +271,18 @@ async function SwapCoins(tokenIn, tokenOut, amountToTrade) {
     console.log(error);
     return;
   }
+}
+
+async function Approve(address) {
+  const SETTINGS = {
+    gasLimit: 8000000,
+    gasPrice: web3.utils.toWei('50', 'Gwei'),
+    from: ACCOUNT,
+  }
+  const tokenContract = new web3.eth.Contract(ERC20_ABI, address);
+  await tokenContract.methods.approve(QUICKSWAP_ADDRESS, 1000000000000).send(SETTINGS);
+  console.log("approved")
+
 }
 
 priceMonitor = setInterval(async () => { await monitorPrice() }, POLLING_INTERVAL)
